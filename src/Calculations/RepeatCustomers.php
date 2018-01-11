@@ -2,7 +2,15 @@
 
 namespace Pawshake\SellerScore\Calculations;
 
-class RepeatCustomers
-{
+use Pawshake\SellerScore\CalculationResult;
 
+class RepeatCustomers implements Calculation
+{
+    /**
+     * @return CalculationResult
+     */
+    public function calculate()
+    {
+        // TODO: Implement calculate() method.
+    }
 }

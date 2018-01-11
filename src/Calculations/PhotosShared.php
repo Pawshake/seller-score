@@ -2,7 +2,15 @@
 
 namespace Pawshake\SellerScore\Calculations;
 
-class PhotosShared
-{
+use Pawshake\SellerScore\CalculationResult;
 
+class PhotosShared implements Calculation
+{
+    /**
+     * @return CalculationResult
+     */
+    public function calculate()
+    {
+        // TODO: Implement calculate() method.
+    }
 }

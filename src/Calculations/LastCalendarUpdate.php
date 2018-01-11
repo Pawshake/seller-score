@@ -2,7 +2,15 @@
 
 namespace Pawshake\SellerScore\Calculations;
 
-class LastCalendarUpdate
-{
+use Pawshake\SellerScore\CalculationResult;
 
+class LastCalendarUpdate implements Calculation
+{
+    /**
+     * @return CalculationResult
+     */
+    public function calculate()
+    {
+        // TODO: Implement calculate() method.
+    }
 }

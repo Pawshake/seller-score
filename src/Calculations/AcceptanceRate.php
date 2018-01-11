@@ -2,10 +2,19 @@
 
 namespace Pawshake\SellerScore\Calculations;
 
-class AcceptanceRate
+use Pawshake\SellerScore\CalculationResult;
+
+class AcceptanceRate implements Calculation
 {
     public function __construct() {
 
     }
 
+    /**
+     * @return CalculationResult
+     */
+    public function calculate()
+    {
+        // TODO: Implement calculate() method.
+    }
 }

@@ -2,7 +2,15 @@
 
 namespace Pawshake\SellerScore\Calculations;
 
-class Bookings
-{
+use Pawshake\SellerScore\CalculationResult;
 
+class Bookings implements Calculation
+{
+    /**
+     * @return CalculationResult
+     */
+    public function calculate()
+    {
+        // TODO: Implement calculate() method.
+    }
 }
