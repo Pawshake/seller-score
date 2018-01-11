@@ -1,0 +1,29 @@
+{
+    "name": "pawshake/seller-score",
+    "description": "Pawshake Seller Score Library",
+    "keywords": [
+        "pawshake",
+        "seller score",
+        "library",
+        "score"
+    ],
+    "license": "DBAD",
+    "authors": [
+        {
+            "name": "Jonas Wouters",
+            "email": "jonas@jw.be"
+        }
+    ],
+    "type": "project",
+    "require": {
+        "php": ">=5.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pawshake\\SellerScore\\": "src/"
+        }
+    }
+}
