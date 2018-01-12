@@ -20,20 +20,21 @@ class ScoreInformation implements \JsonSerializable
     private $score;
 
     /**
-     * @var bool
+     * @var string
      */
-    private $is_penalty;
+    private $penalty;
 
     /**
-     * @param string $text
+     * @param string $description
      * @param string $amount
      * @param int $score
+     * @param string|null $penalty
      */
-    public function __construct($description, $amount, $score, $is_penalty) {
+    public function __construct($description, $amount, $score, $penalty = null) {
         $this->description = $description;
         $this->amount = $amount;
         $this->score = $score;
-        $this->is_penalty = $is_penalty;
+        $this->penalty = $penalty;
     }
 
     /**

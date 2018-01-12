@@ -2,6 +2,6 @@
 
 namespace Pawshake\SellerScore\Calculations;
 
-class LastCalendarUpdate extends Calculation
+class LifetimeResponseTime extends Calculation
 {
 }
