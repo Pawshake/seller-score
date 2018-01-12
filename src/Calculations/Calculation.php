@@ -82,12 +82,13 @@ abstract class Calculation
                 $correctedStartValue = $input - $this->calculationMethod->getFrom();
                 $percentage = ($correctedStartValue * 100) / $range;
 
-                $pointsEarned = round($percentage * ($this->points / 100));
+                $pointsEarned = (int) round($percentage * ($this->points / 100));
                 break;
 
             case CalculationMethod::TYPE_PERCENTAGE:
             default:
-                $pointsEarned = ($input / $this->calculationMethod->getTotal()) * 100;
+                $percentage = ($input / $this->calculationMethod->getTotal()) * 100;
+                $pointsEarned = (int) round($percentage * ($this->points / 100));
                 break;
         }
 
