@@ -55,4 +55,18 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
             [20, 40, 7, 8, 19],
         ];
     }
+
+    public function testInvalidInputType()
+    {
+        $calculation = new Calculations\LastCalendarUpdate(
+            100, new PercentageMethod(100)
+        );
+
+        // Assert
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Calculation input should be an integer');
+        
+        $calculation->calculate('this should fail');
+
+    }
 }
