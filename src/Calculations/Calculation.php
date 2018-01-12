@@ -52,6 +52,13 @@ abstract class Calculation
     }
 
     /**
+     * @return string
+     */
+    public function getTimeFrame() {
+        return 'last year';
+    }
+
+    /**
      * @param mixed|int $input
      *
      * @return CalculationResult
@@ -63,10 +70,14 @@ abstract class Calculation
             throw new \InvalidArgumentException('Calculation input should be an integer');
         }
 
+        $description = $this->getClassDescription()
+            . ' for ' . $this->getTimeFrame()
+            . ' ' . $this->calculationMethod->getType();
         $pointsEarned = 0;
 
         switch ($this->calculationMethod->getType()) {
             case CalculationMethod::TYPE_RANGE:
+                $description .= ' ' . $this->calculationMethod->getRangeDescription();
                 $range = $this->calculationMethod->getTo() - $this->calculationMethod->getFrom();
                 $correctedStartValue = $input - $this->calculationMethod->getFrom();
                 $percentage = ($correctedStartValue * 100) / $range;
@@ -80,8 +91,7 @@ abstract class Calculation
                 break;
         }
 
-        $description = $this->getClassDescription() . ' ';
-        $scoreInformation = new ScoreInformation($description, $pointsEarned, $pointsEarned);
+        $scoreInformation = new ScoreInformation($description, $input, $this->points, $pointsEarned);
 
         return new CalculationResult($pointsEarned, $scoreInformation);
     }

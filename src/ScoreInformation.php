@@ -2,7 +2,7 @@
 
 namespace Pawshake\SellerScore;
 
-class ScoreInformation implements \JsonSerializable
+class ScoreInformation
 {
     /**
      * @var string
@@ -12,12 +12,12 @@ class ScoreInformation implements \JsonSerializable
     /**
      * @var string
      */
-    private $amount;
+    private $input;
 
     /**
      * @var int
      */
-    private $score;
+    private $pointsEarned;
 
     /**
      * @var string
@@ -25,31 +25,22 @@ class ScoreInformation implements \JsonSerializable
     private $penalty;
 
     /**
-     * @param string $description
-     * @param string $amount
-     * @param int $score
-     * @param string|null $penalty
+     * @var int
      */
-    public function __construct($description, $amount, $score, $penalty = null) {
-        $this->description = $description;
-        $this->amount = $amount;
-        $this->score = $score;
-        $this->penalty = $penalty;
-    }
+    private $points;
 
     /**
-     * Specify data which should be serialized to JSON
-     *
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
+     * @param string $description
+     * @param string $input
+     * @param int $points
+     * @param int $pointsEarned
+     * @param string|null $penalty
      */
-    public function jsonSerialize() {
-        return [
-            'text' => $this->description,
-            'amount' => $this->amount,
-            'score' => $this->score,
-        ];
+    public function __construct($description, $input, $points, $pointsEarned, $penalty = null) {
+        $this->description = $description;
+        $this->input = $input;
+        $this->points = $points;
+        $this->pointsEarned = $pointsEarned;
+        $this->penalty = $penalty;
     }
 }

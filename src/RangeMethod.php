@@ -15,6 +15,11 @@ class RangeMethod implements CalculationMethod
     private $to;
 
     /**
+     * @var string
+     */
+    private $unit;
+
+    /**
      * @return string
      */
     public function getType()
@@ -25,11 +30,13 @@ class RangeMethod implements CalculationMethod
     /**
      * @param int $from
      * @param int $to
+     * @param string $unit
      */
-    public function __construct($from, $to)
+    public function __construct($from, $to, $unit = null)
     {
         $this->from = $from;
         $this->to = $to;
+        $this->unit = $unit;
     }
 
     /**
@@ -46,5 +53,21 @@ class RangeMethod implements CalculationMethod
     public function getTo()
     {
         return $this->to;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRangeDescription()
+    {
+        return $this->getFrom() . ' ' . $this->getUnit() . ' -> ' . $this->getTo() . ' ' . $this->getUnit();
     }
 }
