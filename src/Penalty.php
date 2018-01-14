@@ -52,13 +52,29 @@ class Penalty
      */
     public function calculate($input, $points)
     {
-        if ((static::COMPARISON_BIGGER === $this->comparison && $input > $this->amount)
-            || (static::COMPARISON_SMALLER === $this->comparison && $input < $this->amount)
-        ) {
+        if ($this->matches($input)) {
             return $this->calculatePenalty($points);
         }
 
         return $points;
+    }
+
+    /**
+     * @param int $input
+     * @return bool
+     */
+    public function matches($input) {
+        return (static::COMPARISON_BIGGER === $this->comparison && $input > $this->amount)
+            || (static::COMPARISON_SMALLER === $this->comparison && $input < $this->amount);
+    }
+
+    /**
+     * @param int $input
+     * @return string
+     */
+    public function getDescription($input) {
+        return $input . ' ' . $this->comparison . ' ' . $this->amount
+        . ' = <points> ' . $this->penaltyOperation . ' ' . $this->penalty;
     }
 
     /**

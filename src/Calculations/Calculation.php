@@ -92,7 +92,17 @@ abstract class Calculation
                 break;
         }
 
-        $scoreInformation = new ScoreInformation($description, $input, $this->points, $pointsEarned);
+        // Calculate penalties
+        $penalty = null;
+        if (isset($this->hardPenalty) && $this->hardPenalty->matches($input)) {
+            $pointsEarned = $this->hardPenalty->calculate($input, $pointsEarned);
+            $penalty = 'Hard Penalty: ' . $this->hardPenalty->getDescription($input);
+        } elseif (isset($this->softPenalty) && $this->softPenalty->matches($input)) {
+            $pointsEarned = $this->softPenalty->calculate($input, $pointsEarned);
+            $penalty = 'Soft Penalty: ' . $this->softPenalty->getDescription($input);
+        }
+
+        $scoreInformation = new ScoreInformation($description, $input, $this->points, $pointsEarned, $penalty);
 
         return new CalculationResult($pointsEarned, $scoreInformation);
     }
