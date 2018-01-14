@@ -1,6 +1,10 @@
 <?php
 
-namespace Pawshake\SellerScore;
+namespace Pawshake\SellerScore\Calculations;
+
+use Pawshake\SellerScore\CalculationResult;
+use Pawshake\SellerScore\PercentageMethod;
+use Pawshake\SellerScore\RangeMethod;
 
 class CalculationTest extends \PHPUnit_Framework_TestCase
 {
@@ -9,7 +13,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testPercentageMethod($points, $total, $input, $expectedEarnedPoints)
     {
-        $calculation = new Calculations\LastCalendarUpdate(
+        $calculation = new LastCalendarUpdate(
             $points, new PercentageMethod($total)
         );
 
@@ -35,7 +39,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testRangeMethod($points, $from, $to, $input, $expectedEarnedPoints)
     {
-        $calculation = new Calculations\LastCalendarUpdate(
+        $calculation = new LastCalendarUpdate(
             $points, new RangeMethod($from, $to)
         );
 
@@ -58,14 +62,14 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidInputType()
     {
-        $calculation = new Calculations\LastCalendarUpdate(
+        $calculation = new LastCalendarUpdate(
             100, new PercentageMethod(100)
         );
 
         // Assert
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Calculation input should be an integer');
-        
+
         $calculation->calculate('this should fail');
 
     }
