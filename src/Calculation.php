@@ -111,6 +111,7 @@ final class Calculation
                 $range = $this->calculationMethod->getTo() - $this->calculationMethod->getFrom();
                 $correctedStartValue = $input - $this->calculationMethod->getFrom();
                 $percentage = ($correctedStartValue * 100) / $range;
+                $percentage = $percentage > 100 ? 100 : $percentage;
 
                 $pointsEarned = (int) round($percentage * ($this->points / 100));
                 break;
@@ -128,6 +129,7 @@ final class Calculation
                 $total = isset($maximumTotal) && $maximumTotal < $total ? $maximumTotal : $total;
 
                 $percentage = ($input / $total) * 100;
+
                 $penaltyInput = $percentage;
                 $pointsEarned = (int) round($percentage * ($this->points / 100));
                 break;
