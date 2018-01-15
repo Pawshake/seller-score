@@ -1,6 +1,6 @@
 <?php
 
-namespace Pawshake\SellerScore;
+namespace Pawshake\SellerScore\Method;
 
 class RangeMethod implements CalculationMethod
 {

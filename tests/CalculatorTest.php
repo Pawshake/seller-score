@@ -2,6 +2,8 @@
 
 namespace Pawshake\SellerScore;
 
+use Pawshake\SellerScore\Calculation;
+
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,21 +25,21 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $calculationsCollection
             ->addCalculation(
-                new PercentageCalculation(
+                new Calculation\PercentageCalculation(
                     'Test Calculation',
                     'timeframe',
                     10,
                     100
                 ), 100)
             ->addCalculation(
-                new PercentageCalculation(
+                new Calculation\PercentageCalculation(
                     'Test Calculation 2',
                     'timeframe',
                     10,
                     100
                 ), 100)
             ->addCalculation(
-                new PercentageCalculation(
+                new Calculation\PercentageCalculation(
                     'Test Calculation 3',
                     'timeframe',
                     10,

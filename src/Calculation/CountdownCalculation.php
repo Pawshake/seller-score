@@ -1,9 +1,17 @@
 <?php
 
-namespace Pawshake\SellerScore;
+namespace Pawshake\SellerScore\Calculation;
+
+use Pawshake\SellerScore\Method\CountdownMethod;
+use Pawshake\SellerScore\Penalty;
 
 class CountdownCalculation extends Calculation
 {
+    /**
+     * @var CountdownMethod
+     */
+    protected $calculationMethod;
+
     /**
      * @param string $name
      * @param string $timeframe

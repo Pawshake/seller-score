@@ -1,9 +1,17 @@
 <?php
 
-namespace Pawshake\SellerScore;
+namespace Pawshake\SellerScore\Calculation;
+
+use Pawshake\SellerScore\Method\RangeMethod;
+use Pawshake\SellerScore\Penalty;
 
 class RangeCalculation extends Calculation
 {
+    /**
+     * @var RangeMethod
+     */
+    protected $calculationMethod;
+
     /**
      * @param string $name
      * @param string $timeframe

@@ -4,6 +4,7 @@ namespace Pawshake\SellerScore;
 
 use ArrayIterator;
 use IteratorAggregate;
+use Pawshake\SellerScore\Calculation\Calculation;
 use Traversable;
 
 class CalculationsCollection implements IteratorAggregate

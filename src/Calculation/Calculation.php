@@ -1,6 +1,12 @@
 <?php
 
-namespace Pawshake\SellerScore;
+namespace Pawshake\SellerScore\Calculation;
+
+use Pawshake\SellerScore\CalculationResult;
+use Pawshake\SellerScore\Method;
+use Pawshake\SellerScore\Penalty;
+use Pawshake\SellerScore\PenaltyResult;
+use Pawshake\SellerScore\ScoreInformation;
 
 abstract class Calculation
 {
@@ -20,7 +26,7 @@ abstract class Calculation
     protected $points;
 
     /**
-     * @var CalculationMethod|RangeMethod|PercentageMethod|CountdownMethod
+     * @var Method\CalculationMethod
      */
     protected $calculationMethod;
 
@@ -34,12 +40,11 @@ abstract class Calculation
      */
     private $hardPenalty;
 
-
     /**
      * @param string $name
      * @param string $timeframe
      * @param int $points Maximum mount of points this calculation is worth.
-     * @param CalculationMethod $calculationMethod
+     * @param Method\CalculationMethod $calculationMethod
      * @param Penalty|null $softPenalty
      * @param Penalty|null $hardPenalty
      */
@@ -47,7 +52,7 @@ abstract class Calculation
         $name,
         $timeframe,
         $points,
-        CalculationMethod $calculationMethod,
+        Method\CalculationMethod $calculationMethod,
         Penalty $softPenalty = null,
         Penalty $hardPenalty = null
     ) {
@@ -75,7 +80,7 @@ abstract class Calculation
             . ' for ' . $this->getTimeFrame()
             . ' ' . $this->calculationMethod->getType();
 
-        if (CalculationMethod::TYPE_RANGE === $this->calculationMethod->getType()) {
+        if (Method\CalculationMethod::TYPE_RANGE === $this->calculationMethod->getType()) {
             $description .= ' ' . $this->calculationMethod->getRangeDescription();
         }
 

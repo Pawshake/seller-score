@@ -2,12 +2,9 @@
 
 namespace Pawshake\SellerScore\Calculations;
 
-use Pawshake\SellerScore\Calculation;
 use Pawshake\SellerScore\CalculationResult;
-use Pawshake\SellerScore\CountdownCalculation;
+use Pawshake\SellerScore\Calculation;
 use Pawshake\SellerScore\Penalty;
-use Pawshake\SellerScore\PercentageCalculation;
-use Pawshake\SellerScore\RangeCalculation;
 
 class CalculationTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +15,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testPercentageMethod($points, $total, $input, $expectedEarnedPoints)
     {
-        $calculation = new PercentageCalculation(
+        $calculation = new Calculation\PercentageCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
             $points, $total
         );
@@ -45,7 +42,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testRangeMethod($points, $from, $to, $input, $expectedEarnedPoints)
     {
-        $calculation = new RangeCalculation(
+        $calculation = new Calculation\RangeCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
             $points, $from, $to
         );
@@ -72,7 +69,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testCountdownMethod($points, $start, $iterate, $input, $expectedEarnedPoints)
     {
-        $calculation = new CountdownCalculation(
+        $calculation = new Calculation\CountdownCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
             $points, $start, $iterate
         );
@@ -97,7 +94,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidInputType()
     {
-        $calculation = new PercentageCalculation(
+        $calculation = new Calculation\PercentageCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
             100, 100
         );
@@ -113,7 +110,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider penaltyProvider
      */
     public function testCalculationWithPenalty(
-        Calculation $calculation,
+        Calculation\Calculation $calculation,
         $expectedEarnedPoints = 0
     ) {
         $result = $calculation->calculate(50);
@@ -128,7 +125,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
         // calculation, expected earned points
         return [
             [
-                new PercentageCalculation('Test Calculation',
+                new Calculation\PercentageCalculation('Test Calculation',
                     'timeframe',
                     100,
                     200,
@@ -143,7 +140,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                 25,
             ],
             [
-                new PercentageCalculation('Test Calculation',
+                new Calculation\PercentageCalculation('Test Calculation',
                     'timeframe',
                     100,
                     200,
@@ -158,7 +155,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                 25
             ],
             [
-                new PercentageCalculation('Test Calculation',
+                new Calculation\PercentageCalculation('Test Calculation',
                     'timeframe',
                     100,
                     200,
@@ -173,7 +170,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                 5,
             ],
             [
-                new RangeCalculation('Test Calculation',
+                new Calculation\RangeCalculation('Test Calculation',
                     'timeframe',
                     100,
                     1,
@@ -195,7 +192,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                 -9951,
             ],
             [
-                new PercentageCalculation('Test Calculation',
+                new Calculation\PercentageCalculation('Test Calculation',
                     'timeframe',
                     100,
                     200,

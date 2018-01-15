@@ -1,9 +1,18 @@
 <?php
 
-namespace Pawshake\SellerScore;
+namespace Pawshake\SellerScore\Calculation;
+
+use Pawshake\SellerScore\Method\PercentageMethod;
+use Pawshake\SellerScore\Penalty;
+use Pawshake\SellerScore\PenaltyResult;
 
 class PercentageCalculation extends Calculation
 {
+    /**
+     * @var PercentageMethod
+     */
+    protected $calculationMethod;
+
     /**
      * @param string $name
      * @param string $timeframe
