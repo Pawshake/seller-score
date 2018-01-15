@@ -11,12 +11,18 @@ use Pawshake\SellerScore\Calculations\Calculation;
 class Calculator
 {
     /**
+     * @var ScoreInformationCollection
+     */
+    private $scoreInformationCollection;
+
+    /**
      * @param CalculationsCollection $calculationsCollection
      * @param int $currentPoints
      *
      * @return int
      */
     public function calculateCollection(CalculationsCollection $calculationsCollection, $currentPoints = 0) {
+        $this->scoreInformationCollection = new ScoreInformationCollection();
         foreach ($calculationsCollection as $calculationItem) {
             /** @var Calculation $calculation */
             $calculation = $calculationItem['calculation'];
@@ -24,8 +30,18 @@ class Calculator
 
             $calculationResult = $calculation->calculate($input);
             $currentPoints += $calculationResult->getPoints();
+
+            $this->scoreInformationCollection->addScoreInformation($calculationResult->getScoreInformation());
         }
 
         return $currentPoints;
+    }
+
+    /**
+     * @return ScoreInformationCollection
+     */
+    public function getScoreInformationCollection()
+    {
+        return $this->scoreInformationCollection;
     }
 }
