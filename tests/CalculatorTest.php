@@ -30,6 +30,5 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $result = $calculator->calculateCollection($calculationsCollection);
 
         $this->assertEquals(20, $result);
-
     }
 }
