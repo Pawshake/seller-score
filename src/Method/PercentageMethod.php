@@ -18,11 +18,11 @@ class PercentageMethod implements CalculationMethod
     }
 
     /**
-     * @param int $total
+     * @param int $maximumTotal
      */
-    public function __construct($total)
+    public function __construct($maximumTotal)
     {
-        $this->maximumTotal = $total;
+        $this->maximumTotal = $maximumTotal;
     }
 
     /**

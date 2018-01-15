@@ -30,14 +30,14 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                     'timeframe',
                     10,
                     100
-                ), 100)
+                ), 100, 100)
             ->addCalculation(
                 new Calculation\PercentageCalculation(
                     'Test Calculation 2',
                     'timeframe',
                     10,
                     100
-                ), 100)
+                ), 100, 100)
             ->addCalculation(
                 new Calculation\PercentageCalculation(
                     'Test Calculation 3',

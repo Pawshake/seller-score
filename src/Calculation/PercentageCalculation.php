@@ -60,13 +60,24 @@ class PercentageCalculation extends Calculation
 
     /**
      * @param int $input
-     * @param int|null $maximumTotal
+     * @param int $total
      * @return float|int
      */
-    private function calculatePercentage($input, $total = null)
+    private function calculatePercentage($input, $total)
     {
         $maximumTotal = $this->calculationMethod->getMaximumTotal();
-        $total = null !== $total && $total < $maximumTotal ? $total : $maximumTotal;
+
+        if (null === $total && $maximumTotal === null)
+        {
+            throw new \InvalidArgumentException('Total can not be null.');
+        }
+
+        $total = $total === null ? $maximumTotal : $total; // Fallback tot maximum total.
+
+        if (null !== $maximumTotal && $total > $maximumTotal)
+        {
+            throw new \InvalidArgumentException('The input is for more than maximum allowed items.');
+        }
 
         $percentage = ($input / $total) * 100;
 

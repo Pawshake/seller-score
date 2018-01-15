@@ -105,7 +105,7 @@ abstract class Calculation
         $pointsEarned = $this->calculatePoints($input, $total);
 
         // Calculate penalties
-        $penaltyResult = $this->calculatePenalty($penaltyInput, $pointsEarned);
+        $penaltyResult = $this->calculatePenalty($penaltyInput, $pointsEarned, $total);
         $pointsEarned = $penaltyResult->getPoints();
 
         $scoreInformation = new ScoreInformation($this->getDescription(), $input, $this->points, $pointsEarned, $penaltyResult->getDescription());

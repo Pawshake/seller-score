@@ -17,10 +17,10 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     {
         $calculation = new Calculation\PercentageCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
-            $points, $total
+            $points
         );
 
-        $result = $calculation->calculate($input);
+        $result = $calculation->calculate($input, $total);
 
         $this->assertInstanceOf(CalculationResult::class, $result);
         $this->assertEquals($expectedEarnedPoints, $result->getPoints());
