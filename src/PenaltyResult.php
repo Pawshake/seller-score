@@ -38,5 +38,4 @@ class PenaltyResult
     {
         return $this->description;
     }
-
 }

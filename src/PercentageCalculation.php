@@ -2,7 +2,6 @@
 
 namespace Pawshake\SellerScore;
 
-
 class PercentageCalculation extends Calculation
 {
     /**

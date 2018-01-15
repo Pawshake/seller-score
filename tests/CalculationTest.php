@@ -8,7 +8,6 @@ use Pawshake\SellerScore\CountdownCalculation;
 use Pawshake\SellerScore\Penalty;
 use Pawshake\SellerScore\PercentageCalculation;
 use Pawshake\SellerScore\RangeCalculation;
-use Pawshake\SellerScore\RangeMethod;
 
 class CalculationTest extends \PHPUnit_Framework_TestCase
 {
