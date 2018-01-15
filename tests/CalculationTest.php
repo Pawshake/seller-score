@@ -3,6 +3,7 @@
 namespace Pawshake\SellerScore\Calculations;
 
 use Pawshake\SellerScore\Calculation;
+use Pawshake\SellerScore\CalculationMethod;
 use Pawshake\SellerScore\CalculationResult;
 use Pawshake\SellerScore\CountdownMethod;
 use Pawshake\SellerScore\Penalty;
@@ -112,13 +113,17 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider penaltyProvider
      */
-    public function testCalculationWithPenalty($softPenalty, $hardPenalty, $expectedEarnedPoints)
-    {
+    public function testCalculationWithPenalty(
+        CalculationMethod $calculationMethod,
+        Penalty $softPenalty = null,
+        Penalty $hardPenalty = null,
+        $expectedEarnedPoints = 0
+    ) {
         $calculation = new Calculation(
             'Test Calculation',
             'timeframe',
             100,
-            new PercentageMethod(200),
+            $calculationMethod,
             $softPenalty,
             $hardPenalty
         );
@@ -126,15 +131,16 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
         $result = $calculation->calculate(50);
 
         $this->assertInstanceOf(CalculationResult::class, $result);
-        $this->assertEquals($expectedEarnedPoints, $result->getPoints());
+        $this->assertEquals($expectedEarnedPoints, $result->getPoints(), $result->getScoreInformation()->getPenalty());
         $this->assertInternalType("int", $result->getPoints());
     }
 
     public function penaltyProvider()
     {
-        // softPenalty, hardPenalty, to, input, expected earned points
+        // calculationMethod, softPenalty, hardPenalty, to, input, expected earned points
         return [
             [
+                new PercentageMethod( 200),
                 new Penalty(
                     60,
                     Penalty::COMPARISON_BIGGER,
@@ -145,6 +151,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                 25,
             ],
             [
+                new PercentageMethod( 200),
                 new Penalty(
                     40,
                     Penalty::COMPARISON_BIGGER,
@@ -152,9 +159,10 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                     Penalty::OPERATION_MULTIPLY
                 ),
                 null,
-                13,
+                25,
             ],
             [
+                new PercentageMethod( 200),
                 new Penalty(
                     60,
                     Penalty::COMPARISON_SMALLER,
@@ -165,6 +173,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                 5,
             ],
             [
+                new RangeMethod(1, 100),
                 new Penalty(
                     60,
                     Penalty::COMPARISON_SMALLER,
@@ -177,9 +186,10 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                     -10000,
                     Penalty::OPERATION_PLUS
                 ),
-                -9975,
+                -9951,
             ],
             [
+                new PercentageMethod( 200),
                 null,
                 new Penalty(
                     5,

@@ -43,4 +43,44 @@ class ScoreInformation
         $this->pointsEarned = $pointsEarned;
         $this->penalty = $penalty;
     }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInput()
+    {
+        return $this->input;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPointsEarned()
+    {
+        return $this->pointsEarned;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPenalty()
+    {
+        return $this->penalty;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPoints()
+    {
+        return $this->points;
+    }
 }

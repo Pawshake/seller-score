@@ -77,6 +77,19 @@ final class Calculation
         return $this->timeframe;
     }
 
+    private function getDescription() {
+
+        $description = $this->getName()
+            . ' for ' . $this->getTimeFrame()
+            . ' ' . $this->calculationMethod->getType();
+
+        if (CalculationMethod::TYPE_RANGE === $this->calculationMethod->getType()) {
+            $description .= ' ' . $this->calculationMethod->getRangeDescription();
+        }
+
+        return $description;
+    }
+
     /**
      * @param int $input
      *
@@ -89,14 +102,11 @@ final class Calculation
             throw new \InvalidArgumentException('Calculation input should be an integer');
         }
 
-        $description = $this->getName()
-            . ' for ' . $this->getTimeFrame()
-            . ' ' . $this->calculationMethod->getType();
         $pointsEarned = 0;
+        $penaltyInput = $input;
 
         switch ($this->calculationMethod->getType()) {
             case CalculationMethod::TYPE_RANGE:
-                $description .= ' ' . $this->calculationMethod->getRangeDescription();
                 $range = $this->calculationMethod->getTo() - $this->calculationMethod->getFrom();
                 $correctedStartValue = $input - $this->calculationMethod->getFrom();
                 $percentage = ($correctedStartValue * 100) / $range;
@@ -114,22 +124,39 @@ final class Calculation
             case CalculationMethod::TYPE_PERCENTAGE:
             default:
                 $percentage = ($input / $this->calculationMethod->getTotal()) * 100;
+                $penaltyInput = $percentage;
                 $pointsEarned = (int) round($percentage * ($this->points / 100));
                 break;
         }
 
         // Calculate penalties
-        $penalty = null;
-        if (isset($this->hardPenalty) && $this->hardPenalty->matches($input)) {
-            $pointsEarned = $this->hardPenalty->calculate($input, $pointsEarned);
-            $penalty = 'Hard Penalty: ' . $this->hardPenalty->getDescription($input);
-        } elseif (isset($this->softPenalty) && $this->softPenalty->matches($input)) {
-            $pointsEarned = $this->softPenalty->calculate($input, $pointsEarned);
-            $penalty = 'Soft Penalty: ' . $this->softPenalty->getDescription($input);
-        }
+        $penaltyResult = $this->calculatePenalty($penaltyInput, $pointsEarned);
+        $pointsEarned = $penaltyResult->getPoints();
 
-        $scoreInformation = new ScoreInformation($description, $input, $this->points, $pointsEarned, $penalty);
+        $scoreInformation = new ScoreInformation($this->getDescription(), $input, $this->points, $pointsEarned, $penaltyResult->getDescription());
 
         return new CalculationResult($pointsEarned, $scoreInformation);
+    }
+
+    /**
+     * @param int $input
+     * @param int $pointsEarned
+     * @return PenaltyResult
+     */
+    private function calculatePenalty($input, $pointsEarned)
+    {
+        if (isset($this->hardPenalty) && $this->hardPenalty->matches($input)) {
+            return new PenaltyResult(
+                $this->hardPenalty->calculate($input, $pointsEarned),
+                'Hard Penalty: ' . $this->hardPenalty->getDescription($input)
+            );
+        } elseif (isset($this->softPenalty) && $this->softPenalty->matches($input)) {
+            return new PenaltyResult(
+                $this->softPenalty->calculate($input, $pointsEarned),
+                'Soft Penalty: ' . $this->softPenalty->getDescription($input)
+            );
+        }
+
+        return new PenaltyResult($pointsEarned, 'No Penalty');
     }
 }
