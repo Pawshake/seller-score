@@ -2,9 +2,6 @@
 
 namespace Pawshake\SellerScore;
 
-use Pawshake\SellerScore\Calculations\AcceptanceRate;
-use Pawshake\SellerScore\Calculations\ConversionRate;
-
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -24,8 +21,21 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $calculator = new Calculator();
         $calculationsCollection = new CalculationsCollection();
 
-        $calculationsCollection->addCalculation(new AcceptanceRate(10, new PercentageMethod(100)), 100)
-            ->addCalculation(new ConversionRate(10, new PercentageMethod(100)), 100);
+        $calculationsCollection
+            ->addCalculation(
+                new Calculation(
+                    'Test Calculation',
+                    'timeframe',
+                    10,
+                    new PercentageMethod(100)
+                ), 100)
+            ->addCalculation(
+                new Calculation(
+                    'Test Calculation 2',
+                    'timeframe',
+                    10,
+                    new PercentageMethod(100)
+                ), 100);
 
         $result = $calculator->calculateCollection($calculationsCollection);
 

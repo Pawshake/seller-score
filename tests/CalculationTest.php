@@ -2,6 +2,7 @@
 
 namespace Pawshake\SellerScore\Calculations;
 
+use Pawshake\SellerScore\Calculation;
 use Pawshake\SellerScore\CalculationResult;
 use Pawshake\SellerScore\CountdownMethod;
 use Pawshake\SellerScore\Penalty;
@@ -10,12 +11,15 @@ use Pawshake\SellerScore\RangeMethod;
 
 class CalculationTest extends \PHPUnit_Framework_TestCase
 {
+    const CALCULATION_NAME = 'Test Calculation';
+    const CALCULATION_TIMEFRAME = 'timeframe';
     /**
      * @dataProvider percentageProvider
      */
     public function testPercentageMethod($points, $total, $input, $expectedEarnedPoints)
     {
-        $calculation = new LastCalendarUpdate(
+        $calculation = new Calculation(
+            static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
             $points, new PercentageMethod($total)
         );
 
@@ -41,7 +45,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testRangeMethod($points, $from, $to, $input, $expectedEarnedPoints)
     {
-        $calculation = new LastCalendarUpdate(
+        $calculation = new Calculation(
+            static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
             $points, new RangeMethod($from, $to)
         );
 
@@ -67,7 +72,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testCountdownMethod($points, $start, $iterate, $input, $expectedEarnedPoints)
     {
-        $calculation = new LastCalendarUpdate(
+        $calculation = new Calculation(
+            static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
             $points, new CountdownMethod($start, $iterate)
         );
 
@@ -91,7 +97,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidInputType()
     {
-        $calculation = new LastCalendarUpdate(
+        $calculation = new Calculation(
+            static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
             100, new PercentageMethod(100)
         );
 
@@ -107,7 +114,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculationWithPenalty($softPenalty, $hardPenalty, $expectedEarnedPoints)
     {
-        $calculation = new LastCalendarUpdate(
+        $calculation = new Calculation(
+            'Test Calculation',
+            'timeframe',
             100,
             new PercentageMethod(200),
             $softPenalty,

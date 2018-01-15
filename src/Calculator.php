@@ -2,8 +2,6 @@
 
 namespace Pawshake\SellerScore;
 
-use Pawshake\SellerScore\Calculations\Calculation;
-
 /**
  * This class will calculate the seller score for a host, based
  * on the parameters provided.

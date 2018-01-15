@@ -1,6 +1,6 @@
 <?php
 
-namespace Pawshake\SellerScore\Calculations;
+namespace Pawshake\SellerScore;
 
 use Pawshake\SellerScore\CalculationMethod;
 use Pawshake\SellerScore\CalculationResult;
@@ -10,8 +10,18 @@ use Pawshake\SellerScore\PercentageMethod;
 use Pawshake\SellerScore\RangeMethod;
 use Pawshake\SellerScore\ScoreInformation;
 
-abstract class Calculation
+final class Calculation
 {
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $timeframe;
+
     /**
      * @var int
      */
@@ -32,31 +42,39 @@ abstract class Calculation
      */
     private $hardPenalty;
 
+
     /**
+     * @param string $name
+     * @param string $timeframe
      * @param int $points Maximum mount of points this calculation is worth.
      * @param CalculationMethod $calculationMethod
      * @param Penalty|null $softPenalty
      * @param Penalty|null $hardPenalty
-     *
      */
     public function __construct(
+        $name,
+        $timeframe,
         $points,
         CalculationMethod $calculationMethod,
         Penalty $softPenalty = null,
         Penalty $hardPenalty = null
     ) {
-
+        $this->name = $name;
+        $this->timeframe = $timeframe;
         $this->points = $points;
         $this->calculationMethod = $calculationMethod;
         $this->softPenalty = $softPenalty;
         $this->hardPenalty = $hardPenalty;
     }
 
+    private function getName() {
+        return $this->name;
+    }
     /**
      * @return string
      */
-    public function getTimeFrame() {
-        return 'last year';
+    private function getTimeFrame() {
+        return $this->timeframe;
     }
 
     /**
@@ -71,7 +89,7 @@ abstract class Calculation
             throw new \InvalidArgumentException('Calculation input should be an integer');
         }
 
-        $description = $this->getClassDescription()
+        $description = $this->getName()
             . ' for ' . $this->getTimeFrame()
             . ' ' . $this->calculationMethod->getType();
         $pointsEarned = 0;
@@ -113,24 +131,5 @@ abstract class Calculation
         $scoreInformation = new ScoreInformation($description, $input, $this->points, $pointsEarned, $penalty);
 
         return new CalculationResult($pointsEarned, $scoreInformation);
-    }
-
-    /**
-     * Get the class description.
-     * By default based on it's name.
-     *
-     * @return string
-     */
-    protected function getClassDescription()
-    {
-        $re = '/
-          (?<=[a-z])
-          (?=[A-Z])
-        | (?<=[A-Z])
-          (?=[A-Z][a-z])
-        /x';
-        $a = preg_split($re, get_class($this));
-
-        return implode(' ', $a);
     }
 }
