@@ -4,6 +4,7 @@ namespace Pawshake\SellerScore\Calculations;
 
 use Pawshake\SellerScore\CalculationMethod;
 use Pawshake\SellerScore\CalculationResult;
+use Pawshake\SellerScore\CountdownMethod;
 use Pawshake\SellerScore\Penalty;
 use Pawshake\SellerScore\PercentageMethod;
 use Pawshake\SellerScore\RangeMethod;
@@ -17,7 +18,7 @@ abstract class Calculation
     private $points;
 
     /**
-     * @var CalculationMethod|RangeMethod|PercentageMethod
+     * @var CalculationMethod|RangeMethod|PercentageMethod|CountdownMethod
      */
     private $calculationMethod;
 
@@ -59,7 +60,7 @@ abstract class Calculation
     }
 
     /**
-     * @param mixed|int $input
+     * @param int $input
      *
      * @return CalculationResult
      * @throws \InvalidArgumentException Default implementation assumes input is an integer.
@@ -83,6 +84,13 @@ abstract class Calculation
                 $percentage = ($correctedStartValue * 100) / $range;
 
                 $pointsEarned = (int) round($percentage * ($this->points / 100));
+                break;
+
+            case CalculationMethod::TYPE_COUNTDOWN:
+                $pointsToAdd = $this->calculationMethod->getStart() - ($input * $this->calculationMethod->getIterate());
+                if ($pointsToAdd >= 0) { // Don't add less than 0.
+                    $pointsEarned = (int)round($this->points + $pointsToAdd);
+                }
                 break;
 
             case CalculationMethod::TYPE_PERCENTAGE:

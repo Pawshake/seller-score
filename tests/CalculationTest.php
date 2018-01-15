@@ -3,6 +3,7 @@
 namespace Pawshake\SellerScore\Calculations;
 
 use Pawshake\SellerScore\CalculationResult;
+use Pawshake\SellerScore\CountdownMethod;
 use Pawshake\SellerScore\Penalty;
 use Pawshake\SellerScore\PercentageMethod;
 use Pawshake\SellerScore\RangeMethod;
@@ -58,6 +59,33 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
             [100, 0, 100, 10, 10],
             [80, 0, 100, 20, 16],
             [20, 40, 7, 8, 19],
+        ];
+    }
+
+    /**
+     * @dataProvider countdownProvider
+     */
+    public function testCountdownMethod($points, $start, $iterate, $input, $expectedEarnedPoints)
+    {
+        $calculation = new LastCalendarUpdate(
+            $points, new CountdownMethod($start, $iterate)
+        );
+
+        $result = $calculation->calculate($input);
+
+        $this->assertInstanceOf(CalculationResult::class, $result);
+        $this->assertEquals($expectedEarnedPoints, $result->getPoints());
+        $this->assertInternalType("int", $result->getPoints());
+    }
+
+    public function countdownProvider()
+    {
+        // Points, start, iterate, input, expected earned points
+        return [
+            [100, 600, 10, 10, 600],
+            [0, 600, 10, 20, 400],
+            [100, 600, 60, 10, 100],
+            [100, 600, 120, 100, 0],
         ];
     }
 
