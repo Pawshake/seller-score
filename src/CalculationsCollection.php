@@ -9,10 +9,21 @@ use Traversable;
 
 class CalculationsCollection implements IteratorAggregate
 {
-    private $calculations;
+    private $calculations = [];
 
-    public function __construct(Calculation ...$calculations) {
-        $this->calculations = $calculations;
+    /**
+     * @param Calculation $calculation
+     * @param int $input
+     *
+     * @return CalculationsCollection
+     */
+    public function addCalculation(Calculation $calculation, $input) {
+        $this->calculations[] = [
+            'calculation' => $calculation,
+            'input' => $input,
+        ];
+
+        return $this;
     }
 
     /**

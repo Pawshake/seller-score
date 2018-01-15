@@ -10,13 +10,22 @@ use Pawshake\SellerScore\Calculations\Calculation;
  */
 class Calculator
 {
-    public function calculateCollection(CalculationsCollection $calculationsCollection) {
-        $earnedPoints = 0;
-        foreach ($calculationsCollection as $calculation) {
+    /**
+     * @param CalculationsCollection $calculationsCollection
+     * @param int $currentPoints
+     *
+     * @return int
+     */
+    public function calculateCollection(CalculationsCollection $calculationsCollection, $currentPoints = 0) {
+        foreach ($calculationsCollection as $calculationItem) {
             /** @var Calculation $calculation */
-            $earnedPoints = $calculation->calculate(0);
+            $calculation = $calculationItem['calculation'];
+            $input = $calculationItem['input'];
+
+            $calculationResult = $calculation->calculate($input);
+            $currentPoints += $calculationResult->getPoints();
         }
 
-        return $earnedPoints;
+        return $currentPoints;
     }
 }
