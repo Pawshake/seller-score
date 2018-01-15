@@ -20,14 +20,19 @@ class Calculator
      * @param int $currentPoints
      *
      * @return int
+     * @throws \InvalidArgumentException Calculation configuration is not complete.
      */
     public function calculateCollection(CalculationsCollection $calculationsCollection, $currentPoints = 0) {
         $this->scoreInformationCollection = new ScoreInformationCollection();
         foreach ($calculationsCollection as $calculationItem) {
             /** @var Calculation $calculation */
-            $calculation = $calculationItem['calculation'];
-            $input = $calculationItem['input'];
-            $maximumTotal = $calculationItem['maximum_total'];
+            $calculation = $calculationItem[CalculationsCollection::FIELD_CALCULATION];
+            $input = $calculationItem[CalculationsCollection::FIELD_INPUT];
+            $maximumTotal = $calculationItem[CalculationsCollection::FIELD_MAXIMUM_TOTAL];
+
+            if (!$calculation instanceof Calculation || $input === null) {
+                throw new \InvalidArgumentException('Calculation configuration is not complete.');
+            }
 
             $calculationResult = $calculation->calculate($input, $maximumTotal);
             $currentPoints += $calculationResult->getPoints();
