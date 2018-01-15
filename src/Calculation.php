@@ -92,11 +92,12 @@ final class Calculation
 
     /**
      * @param int $input
+     * @param int $maximumTotal
      *
      * @return CalculationResult
      * @throws \InvalidArgumentException Default implementation assumes input is an integer.
      */
-    public function calculate($input)
+    public function calculate($input, $maximumTotal = null)
     {
         if (!is_numeric($input)) {
             throw new \InvalidArgumentException('Calculation input should be an integer');
@@ -123,7 +124,10 @@ final class Calculation
 
             case CalculationMethod::TYPE_PERCENTAGE:
             default:
-                $percentage = ($input / $this->calculationMethod->getTotal()) * 100;
+                $total = $this->calculationMethod->getTotal();
+                $total = isset($maximumTotal) && $maximumTotal < $total ? $maximumTotal : $total;
+
+                $percentage = ($input / $total) * 100;
                 $penaltyInput = $percentage;
                 $pointsEarned = (int) round($percentage * ($this->points / 100));
                 break;

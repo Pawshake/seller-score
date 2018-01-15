@@ -25,8 +25,9 @@ class Calculator
             /** @var Calculation $calculation */
             $calculation = $calculationItem['calculation'];
             $input = $calculationItem['input'];
+            $maximumTotal = $calculationItem['maximum_total'];
 
-            $calculationResult = $calculation->calculate($input);
+            $calculationResult = $calculation->calculate($input, $maximumTotal);
             $currentPoints += $calculationResult->getPoints();
 
             $this->scoreInformationCollection->addScoreInformation($calculationResult->getScoreInformation());

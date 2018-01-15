@@ -13,13 +13,15 @@ class CalculationsCollection implements IteratorAggregate
     /**
      * @param Calculation $calculation
      * @param int $input
+     * @param int $maximumTotal
      *
      * @return CalculationsCollection
      */
-    public function addCalculation(Calculation $calculation, $input) {
+    public function addCalculation(Calculation $calculation, $input, $maximumTotal = null) {
         $this->calculations[] = [
             'calculation' => $calculation,
             'input' => $input,
+            'maximum_total' => $maximumTotal,
         ];
 
         return $this;
