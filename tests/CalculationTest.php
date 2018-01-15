@@ -3,11 +3,11 @@
 namespace Pawshake\SellerScore\Calculations;
 
 use Pawshake\SellerScore\Calculation;
-use Pawshake\SellerScore\CalculationMethod;
 use Pawshake\SellerScore\CalculationResult;
-use Pawshake\SellerScore\CountdownMethod;
+use Pawshake\SellerScore\CountdownCalculation;
 use Pawshake\SellerScore\Penalty;
-use Pawshake\SellerScore\PercentageMethod;
+use Pawshake\SellerScore\PercentageCalculation;
+use Pawshake\SellerScore\RangeCalculation;
 use Pawshake\SellerScore\RangeMethod;
 
 class CalculationTest extends \PHPUnit_Framework_TestCase
@@ -19,9 +19,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testPercentageMethod($points, $total, $input, $expectedEarnedPoints)
     {
-        $calculation = new Calculation(
+        $calculation = new PercentageCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
-            $points, new PercentageMethod($total)
+            $points, $total
         );
 
         $result = $calculation->calculate($input);
@@ -46,9 +46,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testRangeMethod($points, $from, $to, $input, $expectedEarnedPoints)
     {
-        $calculation = new Calculation(
+        $calculation = new RangeCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
-            $points, new RangeMethod($from, $to)
+            $points, $from, $to
         );
 
         $result = $calculation->calculate($input);
@@ -73,9 +73,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      */
     public function testCountdownMethod($points, $start, $iterate, $input, $expectedEarnedPoints)
     {
-        $calculation = new Calculation(
+        $calculation = new CountdownCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
-            $points, new CountdownMethod($start, $iterate)
+            $points, $start, $iterate
         );
 
         $result = $calculation->calculate($input);
@@ -92,15 +92,15 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
             [100, 600, 10, 10, 600],
             [0, 600, 10, 20, 400],
             [100, 600, 60, 10, 100],
-            [100, 600, 120, 100, 0],
+            [100, 600, 120, 100, 100],
         ];
     }
 
     public function testInvalidInputType()
     {
-        $calculation = new Calculation(
+        $calculation = new PercentageCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
-            100, new PercentageMethod(100)
+            100, 100
         );
 
         // Assert
@@ -114,20 +114,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider penaltyProvider
      */
     public function testCalculationWithPenalty(
-        CalculationMethod $calculationMethod,
-        Penalty $softPenalty = null,
-        Penalty $hardPenalty = null,
+        Calculation $calculation,
         $expectedEarnedPoints = 0
     ) {
-        $calculation = new Calculation(
-            'Test Calculation',
-            'timeframe',
-            100,
-            $calculationMethod,
-            $softPenalty,
-            $hardPenalty
-        );
-
         $result = $calculation->calculate(50);
 
         $this->assertInstanceOf(CalculationResult::class, $result);
@@ -137,65 +126,87 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
 
     public function penaltyProvider()
     {
-        // calculationMethod, softPenalty, hardPenalty, to, input, expected earned points
+        // calculation, expected earned points
         return [
             [
-                new PercentageMethod( 200),
-                new Penalty(
-                    60,
-                    Penalty::COMPARISON_BIGGER,
-                    0.5,
-                    Penalty::OPERATION_MULTIPLY
+                new PercentageCalculation('Test Calculation',
+                    'timeframe',
+                    100,
+                    200,
+                    new Penalty(
+                        60,
+                        Penalty::COMPARISON_BIGGER,
+                        0.5,
+                        Penalty::OPERATION_MULTIPLY
+                    ),
+                    null
                 ),
-                null,
                 25,
             ],
             [
-                new PercentageMethod( 200),
-                new Penalty(
-                    40,
-                    Penalty::COMPARISON_BIGGER,
-                    0.5,
-                    Penalty::OPERATION_MULTIPLY
+                new PercentageCalculation('Test Calculation',
+                    'timeframe',
+                    100,
+                    200,
+                    new Penalty(
+                        40,
+                        Penalty::COMPARISON_BIGGER,
+                        0.5,
+                        Penalty::OPERATION_MULTIPLY
+                    ),
+                    null
                 ),
-                null,
-                25,
+                25
             ],
             [
-                new PercentageMethod( 200),
-                new Penalty(
-                    60,
-                    Penalty::COMPARISON_SMALLER,
-                    0.2,
-                    Penalty::OPERATION_MULTIPLY
+                new PercentageCalculation('Test Calculation',
+                    'timeframe',
+                    100,
+                    200,
+                    new Penalty(
+                        60,
+                        Penalty::COMPARISON_SMALLER,
+                        0.2,
+                        Penalty::OPERATION_MULTIPLY
+                    ),
+                    null
                 ),
-                null,
                 5,
             ],
             [
-                new RangeMethod(1, 100),
-                new Penalty(
-                    60,
-                    Penalty::COMPARISON_SMALLER,
-                    0.2,
-                    Penalty::OPERATION_MULTIPLY
-                ),
-                new Penalty(
-                    55,
-                    Penalty::COMPARISON_SMALLER,
-                    -10000,
-                    Penalty::OPERATION_PLUS
+                new RangeCalculation('Test Calculation',
+                    'timeframe',
+                    100,
+                    1,
+                    100,
+                    '',
+                    new Penalty(
+                        60,
+                        Penalty::COMPARISON_SMALLER,
+                        0.2,
+                        Penalty::OPERATION_MULTIPLY
+                    ),
+                    new Penalty(
+                        55,
+                        Penalty::COMPARISON_SMALLER,
+                        -10000,
+                        Penalty::OPERATION_PLUS
+                    )
                 ),
                 -9951,
             ],
             [
-                new PercentageMethod( 200),
-                null,
-                new Penalty(
-                    5,
-                    Penalty::COMPARISON_BIGGER,
-                    -10000,
-                    Penalty::OPERATION_PLUS
+                new PercentageCalculation('Test Calculation',
+                    'timeframe',
+                    100,
+                    200,
+                    null,
+                    new Penalty(
+                        5,
+                        Penalty::COMPARISON_BIGGER,
+                        -10000,
+                        Penalty::OPERATION_PLUS
+                    )
                 ),
                 -9975,
             ],

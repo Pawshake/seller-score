@@ -2,15 +2,7 @@
 
 namespace Pawshake\SellerScore;
 
-use Pawshake\SellerScore\CalculationMethod;
-use Pawshake\SellerScore\CalculationResult;
-use Pawshake\SellerScore\CountdownMethod;
-use Pawshake\SellerScore\Penalty;
-use Pawshake\SellerScore\PercentageMethod;
-use Pawshake\SellerScore\RangeMethod;
-use Pawshake\SellerScore\ScoreInformation;
-
-final class Calculation
+abstract class Calculation
 {
     /**
      * @var string
@@ -25,12 +17,12 @@ final class Calculation
     /**
      * @var int
      */
-    private $points;
+    protected $points;
 
     /**
      * @var CalculationMethod|RangeMethod|PercentageMethod|CountdownMethod
      */
-    private $calculationMethod;
+    protected $calculationMethod;
 
     /**
      * @var null|Penalty
@@ -103,37 +95,9 @@ final class Calculation
             throw new \InvalidArgumentException('Calculation input should be an integer');
         }
 
-        $pointsEarned = 0;
         $penaltyInput = $input;
 
-        switch ($this->calculationMethod->getType()) {
-            case CalculationMethod::TYPE_RANGE:
-                $range = $this->calculationMethod->getTo() - $this->calculationMethod->getFrom();
-                $correctedStartValue = $input - $this->calculationMethod->getFrom();
-                $percentage = ($correctedStartValue * 100) / $range;
-                $percentage = $percentage > 100 ? 100 : $percentage;
-
-                $pointsEarned = (int) round($percentage * ($this->points / 100));
-                break;
-
-            case CalculationMethod::TYPE_COUNTDOWN:
-                $pointsToAdd = $this->calculationMethod->getStart() - ($input * $this->calculationMethod->getIterate());
-                if ($pointsToAdd >= 0) { // Don't add less than 0.
-                    $pointsEarned = (int)round($this->points + $pointsToAdd);
-                }
-                break;
-
-            case CalculationMethod::TYPE_PERCENTAGE:
-            default:
-                $total = $this->calculationMethod->getTotal();
-                $total = isset($maximumTotal) && $maximumTotal < $total ? $maximumTotal : $total;
-
-                $percentage = ($input / $total) * 100;
-
-                $penaltyInput = $percentage;
-                $pointsEarned = (int) round($percentage * ($this->points / 100));
-                break;
-        }
+        $pointsEarned = $this->calculatePoints($input, $maximumTotal);
 
         // Calculate penalties
         $penaltyResult = $this->calculatePenalty($penaltyInput, $pointsEarned);
@@ -146,10 +110,17 @@ final class Calculation
 
     /**
      * @param int $input
+     * @param int|null $maximumTotal
+     * @return int
+     */
+    abstract protected function calculatePoints($input, $maximumTotal = null);
+
+    /**
+     * @param int $input
      * @param int $pointsEarned
      * @return PenaltyResult
      */
-    private function calculatePenalty($input, $pointsEarned)
+    protected function calculatePenalty($input, $pointsEarned)
     {
         if (isset($this->hardPenalty) && $this->hardPenalty->matches($input)) {
             return new PenaltyResult(
