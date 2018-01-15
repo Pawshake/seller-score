@@ -35,10 +35,10 @@ class CountdownCalculation extends Calculation
 
     /**
      * @param int $input
-     * @param int|null $maximumTotal
+     * @param int|null $total
      * @return int
      */
-    protected function calculatePoints($input, $maximumTotal = null)
+    protected function calculatePoints($input, $total = null)
     {
         $pointsToAdd = $this->calculationMethod->getStart() - ($input * $this->calculationMethod->getIterate());
         if ($pointsToAdd > 0) { // Don't add less than 0.

@@ -17,7 +17,7 @@ class PercentageCalculation extends Calculation
      * @param string $name
      * @param string $timeframe
      * @param int $points Maximum mount of points this calculation is worth.
-     * @param int $total
+     * @param int $maximumTotal
      * @param Penalty|null $softPenalty
      * @param Penalty|null $hardPenalty
      */
@@ -25,21 +25,21 @@ class PercentageCalculation extends Calculation
         $name,
         $timeframe,
         $points,
-        $total,
+        $maximumTotal = null,
         Penalty $softPenalty = null,
         Penalty $hardPenalty = null
     ) {
-        parent::__construct($name, $timeframe, $points, new PercentageMethod($total), $softPenalty, $hardPenalty);
+        parent::__construct($name, $timeframe, $points, new PercentageMethod($maximumTotal), $softPenalty, $hardPenalty);
     }
 
     /**
      * @param int $input
-     * @param int|null $maximumTotal
+     * @param int|null $total
      * @return int
      */
-    protected function calculatePoints($input, $maximumTotal = null)
+    protected function calculatePoints($input, $total = null)
     {
-        $percentage = $this->calculatePercentage($input, $maximumTotal);
+        $percentage = $this->calculatePercentage($input, $total);
 
         return (int) round($percentage * ($this->points / 100));
     }
@@ -47,13 +47,13 @@ class PercentageCalculation extends Calculation
     /**
      * @param int $input
      * @param int $pointsEarned
-     * @param int|null $maximumTotal
+     * @param int|null $total
      *
      * @return PenaltyResult
      */
-    protected function calculatePenalty($input, $pointsEarned, $maximumTotal = null)
+    protected function calculatePenalty($input, $pointsEarned, $total = null)
     {
-        $percentage = $this->calculatePercentage($input, $maximumTotal);
+        $percentage = $this->calculatePercentage($input, $total);
 
         return parent::calculatePenalty($percentage, $pointsEarned);
     }
@@ -63,10 +63,10 @@ class PercentageCalculation extends Calculation
      * @param int|null $maximumTotal
      * @return float|int
      */
-    private function calculatePercentage($input, $maximumTotal = null)
+    private function calculatePercentage($input, $total = null)
     {
-        $total = $this->calculationMethod->getTotal();
-        $total = null !== $maximumTotal && $maximumTotal < $total ? $maximumTotal : $total;
+        $maximumTotal = $this->calculationMethod->getMaximumTotal();
+        $total = null !== $total && $total < $maximumTotal ? $total : $maximumTotal;
 
         $percentage = ($input / $total) * 100;
 

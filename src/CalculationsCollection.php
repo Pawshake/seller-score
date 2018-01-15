@@ -11,7 +11,7 @@ class CalculationsCollection implements IteratorAggregate
 {
     const FIELD_CALCULATION = 'calculation';
     const FIELD_INPUT = 'input';
-    const FIELD_MAXIMUM_TOTAL = 'maximum_total';
+    const FIELD_TOTAL = 'total';
 
     /**
      * @var array
@@ -34,7 +34,7 @@ class CalculationsCollection implements IteratorAggregate
             $this->calculations[$id] = [
                 static::FIELD_CALCULATION => $calculation,
                 static::FIELD_INPUT => null,
-                static::FIELD_MAXIMUM_TOTAL => null,
+                static::FIELD_TOTAL => null,
             ];
         }
 
@@ -44,22 +44,22 @@ class CalculationsCollection implements IteratorAggregate
     /**
      * @param string|int $id
      * @param int $input
-     * @param int|null $maximumInput
+     * @param int|null $total
      *
      * @return CalculationsCollection
      */
-    public function addCalculationInput($id, $input, $maximumInput = null)
+    public function addCalculationInput($id, $input, $total = null)
     {
         if (isset($this->calculations[$id]) && is_array($this->calculations[$id])) {
             $this->calculations[$id] = array_merge($this->calculations[$id], [
                 static::FIELD_INPUT => $input,
-                static::FIELD_MAXIMUM_TOTAL => $maximumInput,
+                static::FIELD_TOTAL => $total,
             ]);
         } else {
             $this->calculations[$id] = [
                 static::FIELD_CALCULATION => null,
                 static::FIELD_INPUT => $input,
-                static::FIELD_MAXIMUM_TOTAL => $maximumInput,
+                static::FIELD_TOTAL => $total,
             ];
         }
 
@@ -69,16 +69,16 @@ class CalculationsCollection implements IteratorAggregate
     /**
      * @param Calculation $calculation
      * @param int $input
-     * @param int $maximumTotal
+     * @param int $total
      *
      * @return CalculationsCollection
      */
-    public function addCalculation(Calculation $calculation, $input, $maximumTotal = null)
+    public function addCalculation(Calculation $calculation, $input, $total = null)
     {
         $this->calculations[] = [
             static::FIELD_CALCULATION => $calculation,
             static::FIELD_INPUT => $input,
-            static::FIELD_MAXIMUM_TOTAL => $maximumTotal,
+            static::FIELD_TOTAL => $total,
         ];
 
         return $this;

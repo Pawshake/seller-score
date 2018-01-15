@@ -89,12 +89,12 @@ abstract class Calculation
 
     /**
      * @param int $input
-     * @param int $maximumTotal
+     * @param int $total
      *
      * @return CalculationResult
      * @throws \InvalidArgumentException Default implementation assumes input is an integer.
      */
-    public function calculate($input, $maximumTotal = null)
+    public function calculate($input, $total = null)
     {
         if (!is_numeric($input)) {
             throw new \InvalidArgumentException('Calculation input should be an integer');
@@ -102,7 +102,7 @@ abstract class Calculation
 
         $penaltyInput = $input;
 
-        $pointsEarned = $this->calculatePoints($input, $maximumTotal);
+        $pointsEarned = $this->calculatePoints($input, $total);
 
         // Calculate penalties
         $penaltyResult = $this->calculatePenalty($penaltyInput, $pointsEarned);
@@ -115,10 +115,10 @@ abstract class Calculation
 
     /**
      * @param int $input
-     * @param int|null $maximumTotal
+     * @param int|null $total
      * @return int
      */
-    abstract protected function calculatePoints($input, $maximumTotal = null);
+    abstract protected function calculatePoints($input, $total = null);
 
     /**
      * @param int $input

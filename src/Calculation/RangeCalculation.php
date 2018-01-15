@@ -37,10 +37,10 @@ class RangeCalculation extends Calculation
 
     /**
      * @param int $input
-     * @param int|null $maximumTotal
+     * @param int|null $total
      * @return int
      */
-    protected function calculatePoints($input, $maximumTotal = null)
+    protected function calculatePoints($input, $total = null)
     {
         $range = $this->calculationMethod->getTo() - $this->calculationMethod->getFrom();
         $correctedStartValue = $input - $this->calculationMethod->getFrom();

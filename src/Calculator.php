@@ -28,13 +28,13 @@ class Calculator
             /** @var Calculation $calculation */
             $calculation = $calculationItem[CalculationsCollection::FIELD_CALCULATION];
             $input = $calculationItem[CalculationsCollection::FIELD_INPUT];
-            $maximumTotal = $calculationItem[CalculationsCollection::FIELD_MAXIMUM_TOTAL];
+            $total = $calculationItem[CalculationsCollection::FIELD_TOTAL];
 
             if (!$calculation instanceof Calculation || $input === null) {
                 throw new \InvalidArgumentException('Calculation configuration is not complete.');
             }
 
-            $calculationResult = $calculation->calculate($input, $maximumTotal);
+            $calculationResult = $calculation->calculate($input, $total);
             $currentPoints += $calculationResult->getPoints();
 
             $this->scoreInformationCollection->addScoreInformation($calculationResult->getScoreInformation());

@@ -7,7 +7,7 @@ class PercentageMethod implements CalculationMethod
     /**
      * @var int
      */
-    private $total;
+    private $maximumTotal;
 
     /**
      * @return string
@@ -22,14 +22,14 @@ class PercentageMethod implements CalculationMethod
      */
     public function __construct($total)
     {
-        $this->total = $total;
+        $this->maximumTotal = $total;
     }
 
     /**
      * @return int
      */
-    public function getTotal()
+    public function getMaximumTotal()
     {
-        return $this->total;
+        return $this->maximumTotal;
     }
 }
