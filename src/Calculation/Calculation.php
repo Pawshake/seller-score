@@ -78,11 +78,13 @@ abstract class Calculation
 
         $description = $this->getName()
             . ' for ' . $this->getTimeFrame()
-            . ' ' . $this->calculationMethod->getType();
+            . ' (' . $this->calculationMethod->getType();
 
         if (Method\CalculationMethod::TYPE_RANGE === $this->calculationMethod->getType()) {
             $description .= ' ' . $this->calculationMethod->getRangeDescription();
         }
+
+        $description .= ')';
 
         return $description;
     }
