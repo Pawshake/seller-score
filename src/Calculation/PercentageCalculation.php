@@ -69,7 +69,7 @@ class PercentageCalculation extends Calculation
 
         if (empty($total) && empty($maximumTotal))
         {
-            throw new \InvalidArgumentException('Total can not be null.');
+            return 0;
         }
 
         $total = empty($total) ? $maximumTotal : $total; // Fallback tot maximum total.
