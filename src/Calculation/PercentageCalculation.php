@@ -67,12 +67,12 @@ class PercentageCalculation extends Calculation
     {
         $maximumTotal = $this->calculationMethod->getMaximumTotal();
 
-        if (null === $total && $maximumTotal === null)
+        if (empty($total) && empty($maximumTotal))
         {
             throw new \InvalidArgumentException('Total can not be null.');
         }
 
-        $total = $total === null ? $maximumTotal : $total; // Fallback tot maximum total.
+        $total = empty($total) ? $maximumTotal : $total; // Fallback tot maximum total.
 
         if (null !== $maximumTotal && $total > $maximumTotal)
         {
