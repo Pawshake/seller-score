@@ -74,7 +74,7 @@ class PercentageCalculation extends Calculation
 
         $total = empty($total) ? $maximumTotal : $total; // Fallback tot maximum total.
 
-        if (null !== $maximumTotal && $total > $maximumTotal)
+        if ($input > $total)
         {
             throw new \InvalidArgumentException('The input is for more than maximum allowed items.');
         }
