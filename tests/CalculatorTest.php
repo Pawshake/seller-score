@@ -3,24 +3,15 @@
 namespace Pawshake\SellerScore;
 
 use Pawshake\SellerScore\Calculation;
+use ReflectionClass;
 
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Check for syntax errors.
      */
-    public function testIsThereAnySyntaxError()
-    {
-        $var = new Calculator();
-        $this->assertTrue(is_object($var));
-    }
-
-    /**
-     * Check for syntax errors.
-     */
     public function testCalculator()
     {
-        $calculator = new Calculator();
         $calculationsCollection = new CalculationsCollection();
 
         $calculationsCollection
@@ -46,7 +37,16 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                     100
                 ), 10, 10); // Only 10 records, 10 out of 10 = 10 points
 
-        $result = $calculator->calculateCollection($calculationsCollection);
+        $calculator = $this->getMockForAbstractClass('Pawshake\SellerScore\Calculator');
+
+        // Set the calculation collection.
+        $reflection = new ReflectionClass($calculator);
+        $reflection_property = $reflection->getProperty('calculationCollection');
+        $reflection_property->setAccessible(true);
+
+        $reflection_property->setValue($calculator, $calculationsCollection);
+
+        $result = $calculator->calculate(0);
 
         $this->assertEquals(30, $result);
     }

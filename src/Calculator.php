@@ -8,12 +8,53 @@ use Pawshake\SellerScore\Calculation\Calculation;
  * This class will calculate the seller score for a host, based
  * on the parameters provided.
  */
-class Calculator
+abstract class Calculator
 {
     /**
      * @var ScoreInformationCollection
      */
     private $scoreInformationCollection;
+
+    /**
+     * @var CalculationsCollection
+     */
+    protected $calculationCollection;
+
+    /**
+     * Configure the calculations collection
+     */
+    abstract protected function configure();
+
+    /**
+     * @param int $startingPoints
+     * @return int
+     */
+    public function calculate($startingPoints = 0) {
+        if (null === $this->calculationCollection) {
+            $this->configure();
+        }
+        return $this->calculateCollection($this->calculationCollection, $startingPoints);
+    }
+
+    /**
+     * @param string $id
+     * @param int $input
+     * @param int|null $total
+     */
+    public function addCalculationInput($id, $input, $total = null) {
+        if (null === $this->calculationCollection) {
+            $this->configure();
+        }
+        $this->calculationCollection->addCalculationInput($id, $input, $total);
+    }
+
+    /**
+     * @return ScoreInformationCollection
+     */
+    public function getScoreInformationCollection()
+    {
+        return $this->scoreInformationCollection;
+    }
 
     /**
      * @param CalculationsCollection $calculationsCollection
@@ -22,7 +63,7 @@ class Calculator
      * @return int
      * @throws \InvalidArgumentException Calculation configuration is not complete.
      */
-    public function calculateCollection(CalculationsCollection $calculationsCollection, $currentPoints = 0) {
+    private function calculateCollection(CalculationsCollection $calculationsCollection, $currentPoints = 0) {
         $this->scoreInformationCollection = new ScoreInformationCollection();
         foreach ($calculationsCollection as $calculationItem) {
             /** @var Calculation $calculation */
@@ -41,13 +82,5 @@ class Calculator
         }
 
         return $currentPoints;
-    }
-
-    /**
-     * @return ScoreInformationCollection
-     */
-    public function getScoreInformationCollection()
-    {
-        return $this->scoreInformationCollection;
     }
 }
