@@ -16,7 +16,6 @@ class CountdownCalculation extends Calculation
      * @param string $name
      * @param string $timeframe
      * @param int $points Maximum mount of points this calculation is worth.
-     * @param int $start
      * @param int $iterate
      * @param Penalty|null $softPenalty
      * @param Penalty|null $hardPenalty
@@ -25,12 +24,11 @@ class CountdownCalculation extends Calculation
         $name,
         $timeframe,
         $points,
-        $start,
         $iterate,
         Penalty $softPenalty = null,
         Penalty $hardPenalty = null
     ) {
-        parent::__construct($name, $timeframe, $points, new CountdownMethod($start, $iterate), $softPenalty, $hardPenalty);
+        parent::__construct($name, $timeframe, $points, new CountdownMethod($points, $iterate), $softPenalty, $hardPenalty);
     }
 
     /**
@@ -40,11 +38,11 @@ class CountdownCalculation extends Calculation
      */
     protected function calculatePoints($input, $total = null)
     {
-        $pointsToAdd = $this->calculationMethod->getStart() - ($input * $this->calculationMethod->getIterate());
-        if ($pointsToAdd > 0) { // Don't add less than 0.
-            return (int)round($this->points + $pointsToAdd);
+        $pointsToSubtract = $input * $this->calculationMethod->getIterate();
+        if ($pointsToSubtract < $this->points) { // Don't add less than 0.
+            return (int)round($this->points - $pointsToSubtract);
         }
 
-        return $this->points;
+        return 0;
     }
 }

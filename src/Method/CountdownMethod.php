@@ -28,7 +28,6 @@ class CountdownMethod implements CalculationMethod
      */
     public function __construct($start, $iterate)
     {
-        $this->start = $start;
         $this->iterate = $iterate;
     }
 

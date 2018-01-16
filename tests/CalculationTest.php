@@ -67,11 +67,11 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider countdownProvider
      */
-    public function testCountdownMethod($points, $start, $iterate, $input, $expectedEarnedPoints)
+    public function testCountdownMethod($points, $iterate, $input, $expectedEarnedPoints)
     {
         $calculation = new Calculation\CountdownCalculation(
             static::CALCULATION_NAME, static::CALCULATION_TIMEFRAME,
-            $points, $start, $iterate
+            $points, $iterate
         );
 
         $result = $calculation->calculate($input);
@@ -83,12 +83,12 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
 
     public function countdownProvider()
     {
-        // Points, start, iterate, input, expected earned points
+        // Points, iterate, input, expected earned points
         return [
-            [100, 600, 10, 10, 600],
-            [0, 600, 10, 20, 400],
-            [100, 600, 60, 10, 100],
-            [100, 600, 120, 100, 100],
+            [600, 10, 10, 500],
+            [600, 10, 20, 400],
+            [600, 60, 10, 0],
+            [600, 120, 100, 0],
         ];
     }
 
