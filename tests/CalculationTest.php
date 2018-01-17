@@ -61,6 +61,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
             [100, 0, 100, 10, 10],
             [80, 0, 100, 20, 16],
             [20, 40, 7, 8, 19],
+            [20, 40, 7, 500, 0],
         ];
     }
 

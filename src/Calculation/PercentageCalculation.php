@@ -80,7 +80,9 @@ class PercentageCalculation extends Calculation
         }
 
         $percentage = ($input / $total) * 100;
+        $percentage = $percentage > 100 ? 100 : $percentage;
+        $percentage = $percentage < 0 ? 0 : $percentage;
 
-        return $percentage > 100 ? 100 : $percentage;
+        return $percentage;
     }
 }
