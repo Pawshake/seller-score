@@ -46,6 +46,7 @@ class RangeCalculation extends Calculation
         $correctedStartValue = $input - $this->calculationMethod->getFrom();
         $percentage = ($correctedStartValue * 100) / $range;
         $percentage = $percentage > 100 ? 100 : $percentage;
+        $percentage = $percentage < 0 ? 0 : $percentage;
 
         return (int) round($percentage * ($this->points / 100));
     }
