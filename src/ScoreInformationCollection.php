@@ -10,10 +10,6 @@ class ScoreInformationCollection implements IteratorAggregate
 {
     private $scoreInformationItems = [];
 
-    public function addScoreInformationItems(ScoreInformation ...$scoreInformationItems) {
-        $this->scoreInformationItems = $scoreInformationItems;
-    }
-
     public function addScoreInformation(ScoreInformation $scoreInformation) {
         $this->scoreInformationItems[] = $scoreInformation;
     }
