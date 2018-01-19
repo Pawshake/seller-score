@@ -2,7 +2,7 @@
 
 namespace Pawshake\SellerScore\Calculation;
 
-use Pawshake\SellerScore\Method\CountdownMethod;
+use Pawshake\SellerScore\HardPenalty;
 use Pawshake\SellerScore\Penalty;
 
 class CountdownCalculation extends Calculation
@@ -18,7 +18,7 @@ class CountdownCalculation extends Calculation
      * @param int $points Maximum mount of points this calculation is worth.
      * @param int $iterate
      * @param Penalty|null $softPenalty
-     * @param Penalty|null $hardPenalty
+     * @param HardPenalty|null $hardPenalty
      */
     public function __construct(
         $name,
@@ -26,7 +26,7 @@ class CountdownCalculation extends Calculation
         $points,
         $iterate,
         Penalty $softPenalty = null,
-        Penalty $hardPenalty = null
+        HardPenalty $hardPenalty = null
     ) {
         parent::__construct($name, $timeframe, $points, $softPenalty, $hardPenalty);
         $this->iterate = $iterate;
@@ -36,7 +36,6 @@ class CountdownCalculation extends Calculation
     {
         return $input;
     }
-
 
     /**
      * @param int $input

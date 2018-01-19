@@ -2,6 +2,7 @@
 
 namespace Pawshake\SellerScore\Calculation;
 
+use Pawshake\SellerScore\HardPenalty;
 use Pawshake\SellerScore\Penalty;
 
 class RangeCalculation extends PercentageCalculation
@@ -29,7 +30,7 @@ class RangeCalculation extends PercentageCalculation
      * @param int $to
      * @param string|null $unit
      * @param Penalty|null $softPenalty
-     * @param Penalty|null $hardPenalty
+     * @param HardPenalty|null $hardPenalty
      */
     public function __construct(
         $name,
@@ -39,7 +40,7 @@ class RangeCalculation extends PercentageCalculation
         $to,
         $unit = null,
         Penalty $softPenalty = null,
-        Penalty $hardPenalty = null
+        HardPenalty $hardPenalty = null
     ) {
         parent::__construct($name, $timeframe, $points, 0, $softPenalty, $hardPenalty);
         $this->from = $from;
