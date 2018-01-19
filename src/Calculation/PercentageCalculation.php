@@ -2,6 +2,7 @@
 
 namespace Pawshake\SellerScore\Calculation;
 
+use Pawshake\SellerScore\HardPenalty;
 use Pawshake\SellerScore\Penalty;
 
 class PercentageCalculation extends Calculation
@@ -17,7 +18,7 @@ class PercentageCalculation extends Calculation
      * @param int $points Maximum mount of points this calculation is worth.
      * @param int $maximumTotal
      * @param Penalty|null $softPenalty
-     * @param Penalty|null $hardPenalty
+     * @param HardPenalty|null $hardPenalty
      */
     public function __construct(
         $name,
@@ -25,7 +26,7 @@ class PercentageCalculation extends Calculation
         $points,
         $maximumTotal = 0,
         Penalty $softPenalty = null,
-        Penalty $hardPenalty = null
+        HardPenalty $hardPenalty = null
     ) {
         parent::__construct($name, $timeframe, $points, $softPenalty, $hardPenalty);
         $this->maximumTotal = $maximumTotal;
