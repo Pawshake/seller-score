@@ -2,15 +2,24 @@
 
 namespace Pawshake\SellerScore\Calculation;
 
-use Pawshake\SellerScore\Method\RangeMethod;
 use Pawshake\SellerScore\Penalty;
 
-class RangeCalculation extends Calculation
+class RangeCalculation extends PercentageCalculation
 {
     /**
-     * @var RangeMethod
+     * @var int
      */
-    protected $calculationMethod;
+    protected $from;
+
+    /**
+     * @var int
+     */
+    protected $to;
+
+    /**
+     * @var string
+     */
+    protected $unit;
 
     /**
      * @param string $name
@@ -32,22 +41,20 @@ class RangeCalculation extends Calculation
         Penalty $softPenalty = null,
         Penalty $hardPenalty = null
     ) {
-        parent::__construct($name, $timeframe, $points, new RangeMethod($from, $to, $unit), $softPenalty, $hardPenalty);
+        parent::__construct($name, $timeframe, $points, 0, $softPenalty, $hardPenalty);
+        $this->from = $from;
+        $this->to = $to;
+        $this->unit = $unit;
     }
 
     /**
-     * @param int $input
-     * @param int|null $total
-     * @return int
+     * @inheritdoc
      */
     protected function calculatePoints($input, $total = null)
     {
-        $range = $this->calculationMethod->getTo() - $this->calculationMethod->getFrom();
-        $correctedStartValue = $input - $this->calculationMethod->getFrom();
-        $percentage = ($correctedStartValue * 100) / $range;
-        $percentage = $percentage > 100 ? 100 : $percentage;
-        $percentage = $percentage < 0 ? 0 : $percentage;
+        $range = $this->to - $this->from;
+        $correctedStartValue = $input - $this->from;
 
-        return (int) round($percentage * ($this->points / 100));
+        return parent::calculatePoints($correctedStartValue, $range);
     }
 }

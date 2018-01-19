@@ -3,7 +3,6 @@
 namespace Pawshake\SellerScore\Calculation;
 
 use Pawshake\SellerScore\CalculationResult;
-use Pawshake\SellerScore\Method;
 use Pawshake\SellerScore\Penalty;
 use Pawshake\SellerScore\PenaltyResult;
 use Pawshake\SellerScore\ScoreInformation;
@@ -26,11 +25,6 @@ abstract class Calculation
     protected $points;
 
     /**
-     * @var Method\CalculationMethod
-     */
-    protected $calculationMethod;
-
-    /**
      * @var null|Penalty
      */
     private $softPenalty;
@@ -44,7 +38,6 @@ abstract class Calculation
      * @param string $name
      * @param string $timeframe
      * @param int $points Maximum mount of points this calculation is worth.
-     * @param Method\CalculationMethod $calculationMethod
      * @param Penalty|null $softPenalty
      * @param Penalty|null $hardPenalty
      */
@@ -52,14 +45,12 @@ abstract class Calculation
         $name,
         $timeframe,
         $points,
-        Method\CalculationMethod $calculationMethod,
         Penalty $softPenalty = null,
         Penalty $hardPenalty = null
     ) {
         $this->name = $name;
         $this->timeframe = $timeframe;
         $this->points = $points;
-        $this->calculationMethod = $calculationMethod;
         $this->softPenalty = $softPenalty;
         $this->hardPenalty = $hardPenalty;
     }
@@ -75,18 +66,7 @@ abstract class Calculation
     }
 
     private function getDescription() {
-
-        $description = $this->getName()
-            . ' for ' . $this->getTimeFrame()
-            . ' (' . $this->calculationMethod->getType();
-
-        if (Method\CalculationMethod::TYPE_RANGE === $this->calculationMethod->getType()) {
-            $description .= ' ' . $this->calculationMethod->getRangeDescription();
-        }
-
-        $description .= ')';
-
-        return $description;
+        return $this->getName() . ' for ' . $this->getTimeFrame();
     }
 
     /**
@@ -107,7 +87,7 @@ abstract class Calculation
         $pointsEarned = $this->calculatePoints($input, $total);
 
         // Calculate penalties
-        $penaltyResult = $this->calculatePenalty($penaltyInput, $pointsEarned, $total);
+        $penaltyResult = $this->calculatePenalty($penaltyInput, $pointsEarned);
         $pointsEarned = $penaltyResult->getPoints();
 
         $scoreInformation = new ScoreInformation($this->getDescription(), $input, $this->points, $pointsEarned, $penaltyResult->getDescription());

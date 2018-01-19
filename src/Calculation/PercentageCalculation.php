@@ -2,16 +2,15 @@
 
 namespace Pawshake\SellerScore\Calculation;
 
-use Pawshake\SellerScore\Method\PercentageMethod;
 use Pawshake\SellerScore\Penalty;
 use Pawshake\SellerScore\PenaltyResult;
 
 class PercentageCalculation extends Calculation
 {
     /**
-     * @var PercentageMethod
+     * @var int
      */
-    protected $calculationMethod;
+    protected $maximumTotal;
 
     /**
      * @param string $name
@@ -25,16 +24,20 @@ class PercentageCalculation extends Calculation
         $name,
         $timeframe,
         $points,
-        $maximumTotal = null,
+        $maximumTotal = 0,
         Penalty $softPenalty = null,
         Penalty $hardPenalty = null
     ) {
-        parent::__construct($name, $timeframe, $points, new PercentageMethod($maximumTotal), $softPenalty, $hardPenalty);
+        parent::__construct($name, $timeframe, $points, $softPenalty, $hardPenalty);
+        $this->maximumTotal = $maximumTotal;
     }
 
     /**
      * @param int $input
      * @param int|null $total
+     *
+     * @throws \InvalidArgumentException
+     *
      * @return int
      */
     protected function calculatePoints($input, $total = null)
@@ -49,6 +52,8 @@ class PercentageCalculation extends Calculation
      * @param int $pointsEarned
      * @param int|null $total
      *
+     * @throws \InvalidArgumentException
+     *
      * @return PenaltyResult
      */
     protected function calculatePenalty($input, $pointsEarned, $total = null)
@@ -59,27 +64,24 @@ class PercentageCalculation extends Calculation
     }
 
     /**
-     * @param int $input
-     * @param int $total
+     * @param $input
+     * @param $total
+     *
+     * @throws \InvalidArgumentException
+     *
      * @return float|int
      */
     private function calculatePercentage($input, $total)
     {
-        $maximumTotal = $this->calculationMethod->getMaximumTotal();
-
-        if (empty($total) && empty($maximumTotal))
+        if (empty($total) && empty($this->maximumTotal))
         {
             return 0;
         }
 
-        $total = empty($total) ? $maximumTotal : $total; // Fallback tot maximum total.
-
-        if ($input > $total)
-        {
-            throw new \InvalidArgumentException('The input is for more than maximum allowed items.');
-        }
+        $total = empty($total) ? $this->maximumTotal : $total;
 
         $percentage = ($input / $total) * 100;
+
         $percentage = $percentage > 100 ? 100 : $percentage;
         $percentage = $percentage < 0 ? 0 : $percentage;
 

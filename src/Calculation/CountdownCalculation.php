@@ -8,9 +8,9 @@ use Pawshake\SellerScore\Penalty;
 class CountdownCalculation extends Calculation
 {
     /**
-     * @var CountdownMethod
+     * @var int
      */
-    protected $calculationMethod;
+    protected $iterate;
 
     /**
      * @param string $name
@@ -28,7 +28,8 @@ class CountdownCalculation extends Calculation
         Penalty $softPenalty = null,
         Penalty $hardPenalty = null
     ) {
-        parent::__construct($name, $timeframe, $points, new CountdownMethod($points, $iterate), $softPenalty, $hardPenalty);
+        parent::__construct($name, $timeframe, $points, $softPenalty, $hardPenalty);
+        $this->iterate = $iterate;
     }
 
     /**
@@ -38,7 +39,8 @@ class CountdownCalculation extends Calculation
      */
     protected function calculatePoints($input, $total = null)
     {
-        $pointsToSubtract = $input * $this->calculationMethod->getIterate();
+        $pointsToSubtract = $input * $this->iterate;
+
         if ($pointsToSubtract < $this->points) { // Don't add less than 0.
             return (int)round($this->points - $pointsToSubtract);
         }

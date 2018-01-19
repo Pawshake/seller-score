@@ -37,6 +37,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                     100
                 ), 10, 10); // Only 10 records, 10 out of 10 = 10 points
 
+        /** @var Calculator $calculator */
         $calculator = $this->getMockForAbstractClass('Pawshake\SellerScore\Calculator');
 
         // Set the calculation collection.
