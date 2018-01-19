@@ -47,14 +47,10 @@ class RangeCalculation extends PercentageCalculation
         $this->unit = $unit;
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function calculatePoints($input, $total = null)
+    protected function convertInput($input, $total = null)
     {
         $range = $this->to - $this->from;
         $correctedStartValue = $input - $this->from;
-
-        return parent::calculatePoints($correctedStartValue, $range);
+        return parent::convertInput($correctedStartValue, $range);
     }
 }

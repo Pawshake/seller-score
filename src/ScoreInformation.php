@@ -19,10 +19,12 @@ class ScoreInformation
      */
     private $pointsEarned;
 
-    /**
-     * @var string
-     */
-    private $penalty;
+
+    /** @var string $softPenalty */
+    private $softPenalty;
+
+    /** @var string $hardPenalty */
+    private $hardPenalty;
 
     /**
      * @var int
@@ -30,18 +32,21 @@ class ScoreInformation
     private $points;
 
     /**
-     * @param string $description
-     * @param string $input
-     * @param int $points
-     * @param int $pointsEarned
-     * @param string|null $penalty
+     * ScoreInformation constructor.
+     * @param $description
+     * @param $input
+     * @param $points
+     * @param $pointsEarned
+     * @param string $softPenalty
+     * @param string $hardPenalty
      */
-    public function __construct($description, $input, $points, $pointsEarned, $penalty = null) {
+    public function __construct($description, $input, $points, $pointsEarned, $softPenalty = '', $hardPenalty = '') {
         $this->description = $description;
         $this->input = $input;
         $this->points = $points;
         $this->pointsEarned = $pointsEarned;
-        $this->penalty = $penalty;
+        $this->softPenalty = $softPenalty;
+        $this->hardPenalty = $hardPenalty;
     }
 
     /**
@@ -71,9 +76,17 @@ class ScoreInformation
     /**
      * @return string
      */
-    public function getPenalty()
+    public function getSoftPenalty()
     {
-        return $this->penalty;
+        return $this->softPenalty;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHardPenalty()
+    {
+        return $this->hardPenalty;
     }
 
     /**

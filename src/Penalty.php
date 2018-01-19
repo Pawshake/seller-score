@@ -6,6 +6,7 @@ class Penalty
 {
     CONST OPERATION_PLUS = '+';
     CONST OPERATION_MULTIPLY = '*';
+    const OPERATION_FIXED_VALUE = 'fixed_value';
 
     CONST COMPARISON_BIGGER = '>';
     CONST COMPARISON_SMALLER = '<';
@@ -13,7 +14,7 @@ class Penalty
     /**
      * @var int
      */
-    private $amount;
+    private $threshold;
 
     /**
      * @var string
@@ -31,17 +32,23 @@ class Penalty
     private $penaltyOperation;
 
     /**
-     * @param int $amount Total to compare to.
+     * @param int $threshold Total to compare to.
      * @param string $comparison Comparison method.
      * @param int $penalty The penalty when it matches.
      * @param string $penaltyOperation The operation for the penalty on the input.
      */
-    public function __construct($amount, $comparison, $penalty, $penaltyOperation)
+    public function __construct($threshold, $comparison, $penalty, $penaltyOperation)
     {
-        $this->amount = $amount;
+        $this->threshold = $threshold;
         $this->comparison = $comparison;
+
         $this->penalty = $penalty;
         $this->penaltyOperation = $penaltyOperation;
+    }
+
+    public function applies($input) {
+        return (static::COMPARISON_BIGGER === $this->comparison && $input > $this->threshold)
+            || (static::COMPARISON_SMALLER === $this->comparison && $input < $this->threshold);
     }
 
     /**
@@ -64,8 +71,8 @@ class Penalty
      * @return bool
      */
     public function matches($input) {
-        return (static::COMPARISON_BIGGER === $this->comparison && $input > $this->amount)
-            || (static::COMPARISON_SMALLER === $this->comparison && $input < $this->amount);
+        return (static::COMPARISON_BIGGER === $this->comparison && $input > $this->threshold)
+            || (static::COMPARISON_SMALLER === $this->comparison && $input < $this->threshold);
     }
 
     /**
@@ -73,20 +80,30 @@ class Penalty
      * @return string
      */
     public function getDescription($input) {
-        return $input . ' ' . $this->comparison . ' ' . $this->amount
+        return $input . ' ' . $this->comparison . ' ' . $this->threshold
         . ' = <points> ' . $this->penaltyOperation . ' ' . $this->penalty;
     }
 
     /**
-     * @param int $points
+     * @param $points
      *
      * @return int
      */
-    private function calculatePenalty($points) {
-        if ($this->penaltyOperation === static::OPERATION_MULTIPLY) {
-            return (int) round($points * $this->penalty);
+    public function calculatePenalty($points) {
+        switch ($this->penaltyOperation) {
+            case static::OPERATION_FIXED_VALUE:
+                $points = $this->penalty;
+                break;
+
+            case static::OPERATION_MULTIPLY:
+                $points *= $this->penalty;
+                break;
+
+            case static::OPERATION_PLUS:
+                $points += $this->penalty;
+                break;
         }
 
-        return (int) round($points + $this->penalty);
+        return (int) round($points);
     }
 }

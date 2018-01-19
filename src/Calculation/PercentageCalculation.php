@@ -3,7 +3,6 @@
 namespace Pawshake\SellerScore\Calculation;
 
 use Pawshake\SellerScore\Penalty;
-use Pawshake\SellerScore\PenaltyResult;
 
 class PercentageCalculation extends Calculation
 {
@@ -32,42 +31,24 @@ class PercentageCalculation extends Calculation
         $this->maximumTotal = $maximumTotal;
     }
 
-    /**
-     * @param int $input
-     * @param int|null $total
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return int
-     */
-    protected function calculatePoints($input, $total = null)
+    protected function convertInput($input, $total = null)
     {
-        $percentage = $this->calculatePercentage($input, $total);
-
-        return (int) round($percentage * ($this->points / 100));
+        return $this->calculatePercentage($input, $total);
     }
 
     /**
      * @param int $input
-     * @param int $pointsEarned
-     * @param int|null $total
      *
-     * @throws \InvalidArgumentException
-     *
-     * @return PenaltyResult
+     * @return int
      */
-    protected function calculatePenalty($input, $pointsEarned, $total = null)
+    protected function calculatePoints($input)
     {
-        $percentage = $this->calculatePercentage($input, $total);
-
-        return parent::calculatePenalty($percentage, $pointsEarned);
+        return (int) round($input * ($this->points / 100));
     }
 
     /**
      * @param $input
      * @param $total
-     *
-     * @throws \InvalidArgumentException
      *
      * @return float|int
      */

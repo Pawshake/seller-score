@@ -2,17 +2,21 @@
 
 namespace Pawshake\SellerScore;
 
+/**
+ * Class CalculationResult
+ * @package Pawshake\SellerScore
+ */
 class CalculationResult
 {
     /**
-     * @var bool
+     * @var Penalty
      */
-    private $soft_penalty;
+    private $softPenalty;
 
     /**
-     * @var bool
+     * @var Penalty
      */
-    private $hard_penalty;
+    private $hardPenalty;
 
     /**
      * @var int
@@ -25,19 +29,20 @@ class CalculationResult
     private $scoreInformation;
 
     /**
-     * @param int $points
+     * CalculationResult constructor.
+     * @param $points
      * @param ScoreInformation $scoreInformation
-     * @param bool $soft_penalty
-     * @param bool $hard_penalty
+     * @param Penalty|null $softPenalty
+     * @param Penalty|null $hardPenalty
      */
     public function __construct(
         $points,
         ScoreInformation $scoreInformation,
-        $soft_penalty = false,
-        $hard_penalty = false
+        Penalty $softPenalty = null,
+        Penalty $hardPenalty = null
     ) {
-        $this->soft_penalty = $soft_penalty;
-        $this->hard_penalty = $hard_penalty;
+        $this->softPenalty = $softPenalty;
+        $this->hardPenalty = $hardPenalty;
         $this->points = $points;
         $this->scoreInformation = $scoreInformation;
     }
@@ -47,7 +52,7 @@ class CalculationResult
      */
     public function hasSoftPenalty()
     {
-        return $this->soft_penalty;
+        return $this->softPenalty !== null && $this->softPenalty instanceof Penalty;
     }
 
     /**
@@ -55,7 +60,23 @@ class CalculationResult
      */
     public function hasHardPenalty()
     {
-        return $this->hard_penalty;
+        return $this->hardPenalty !== null && $this->hardPenalty instanceof Penalty;
+    }
+
+    /**
+     * @return Penalty
+     */
+    public function getSoftPenalty()
+    {
+        return $this->softPenalty;
+    }
+
+    /**
+     * @return Penalty
+     */
+    public function getHardPenalty()
+    {
+        return $this->hardPenalty;
     }
 
     /**

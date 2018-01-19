@@ -112,22 +112,28 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param Calculation\Calculation $calculation
+     * @param bool $softPenalty
+     * @param bool $hardPenalty
+     *
      * @dataProvider penaltyProvider
      */
     public function testCalculationWithPenalty(
         Calculation\Calculation $calculation,
-        $expectedEarnedPoints = 0
+        $softPenalty = false,
+        $hardPenalty = false
     ) {
         $result = $calculation->calculate(50);
 
         $this->assertInstanceOf(CalculationResult::class, $result);
-        $this->assertEquals($expectedEarnedPoints, $result->getPoints(), $result->getScoreInformation()->getPenalty());
+        $this->assertEquals($softPenalty, $result->hasSoftPenalty());
+        $this->assertEquals($hardPenalty, $result->hasHardPenalty());
         $this->assertInternalType('int', $result->getPoints());
     }
 
     public function penaltyProvider()
     {
-        // calculation, expected earned points
+        // calculation, soft penalty, hard penalty
         return [
             [
                 new Calculation\PercentageCalculation('Test Calculation',
@@ -142,7 +148,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                     ),
                     null
                 ),
-                25,
+                false,
+                false,
             ],
             [
                 new Calculation\PercentageCalculation('Test Calculation',
@@ -157,7 +164,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                     ),
                     null
                 ),
-                25
+                false,
+                false,
             ],
             [
                 new Calculation\PercentageCalculation('Test Calculation',
@@ -172,7 +180,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                     ),
                     null
                 ),
-                5,
+                true,
+                false,
             ],
             [
                 new Calculation\RangeCalculation('Test Calculation',
@@ -194,7 +203,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                         Penalty::OPERATION_PLUS
                     )
                 ),
-                -9951,
+                true,
+                true,
             ],
             [
                 new Calculation\PercentageCalculation('Test Calculation',
@@ -209,7 +219,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                         Penalty::OPERATION_PLUS
                     )
                 ),
-                -9975,
+                false,
+                true,
             ],
         ];
     }

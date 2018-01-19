@@ -4,7 +4,6 @@ namespace Pawshake\SellerScore\Calculation;
 
 use Pawshake\SellerScore\CalculationResult;
 use Pawshake\SellerScore\Penalty;
-use Pawshake\SellerScore\PenaltyResult;
 use Pawshake\SellerScore\ScoreInformation;
 
 abstract class Calculation
@@ -82,45 +81,34 @@ abstract class Calculation
             throw new \InvalidArgumentException('Calculation input should be an integer');
         }
 
-        $penaltyInput = $input;
+        // Converts the input into readable input (percentage for example).
+        $input = $this->convertInput($input, $total);
 
-        $pointsEarned = $this->calculatePoints($input, $total);
+        $addHardPenalty = ($this->hardPenalty instanceof Penalty && $this->hardPenalty->applies($input));
+        $addSoftPenalty = ($this->softPenalty instanceof Penalty && $this->softPenalty->applies($input));
 
-        // Calculate penalties
-        $penaltyResult = $this->calculatePenalty($penaltyInput, $pointsEarned);
-        $pointsEarned = $penaltyResult->getPoints();
+        $pointsEarned = $this->calculatePoints($input);
 
-        $scoreInformation = new ScoreInformation($this->getDescription(), $input, $this->points, $pointsEarned, $penaltyResult->getDescription());
+        $scoreInformation = new ScoreInformation(
+            $this->getDescription(), $input, $this->points, $pointsEarned,
+            $addSoftPenalty ? $this->softPenalty->getDescription($input) : null,
+            $addHardPenalty ? $this->hardPenalty->getDescription($input) : null
+        );
 
-        return new CalculationResult($pointsEarned, $scoreInformation);
+        return new CalculationResult(
+            $pointsEarned,
+            $scoreInformation,
+            $addSoftPenalty ? $this->softPenalty : null,
+            $addHardPenalty ? $this->hardPenalty : null
+        );
     }
+
+    abstract protected function convertInput($input, $total = null);
 
     /**
      * @param int $input
-     * @param int|null $total
+     *
      * @return int
      */
-    abstract protected function calculatePoints($input, $total = null);
-
-    /**
-     * @param int $input
-     * @param int $pointsEarned
-     * @return PenaltyResult
-     */
-    protected function calculatePenalty($input, $pointsEarned)
-    {
-        if (isset($this->hardPenalty) && $this->hardPenalty->matches($input)) {
-            return new PenaltyResult(
-                $this->hardPenalty->calculate($input, $pointsEarned),
-                'Hard Penalty: ' . $this->hardPenalty->getDescription($input)
-            );
-        } elseif (isset($this->softPenalty) && $this->softPenalty->matches($input)) {
-            return new PenaltyResult(
-                $this->softPenalty->calculate($input, $pointsEarned),
-                'Soft Penalty: ' . $this->softPenalty->getDescription($input)
-            );
-        }
-
-        return new PenaltyResult($pointsEarned, 'No Penalty');
-    }
+    abstract protected function calculatePoints($input);
 }

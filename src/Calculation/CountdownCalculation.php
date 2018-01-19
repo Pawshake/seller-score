@@ -32,12 +32,17 @@ class CountdownCalculation extends Calculation
         $this->iterate = $iterate;
     }
 
+    protected function convertInput($input, $total = null)
+    {
+        return $input;
+    }
+
+
     /**
      * @param int $input
-     * @param int|null $total
      * @return int
      */
-    protected function calculatePoints($input, $total = null)
+    protected function calculatePoints($input)
     {
         $pointsToSubtract = $input * $this->iterate;
 

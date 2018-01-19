@@ -16,6 +16,11 @@ abstract class Calculator
     private $scoreInformationCollection;
 
     /**
+     * @var PenaltyCollection
+     */
+    private $penaltyCollection;
+
+    /**
      * @var CalculationsCollection
      */
     protected $calculationCollection;
@@ -27,7 +32,9 @@ abstract class Calculator
 
     /**
      * @param int $startingPoints
+     *
      * @return int
+     * @throws \InvalidArgumentException
      */
     public function calculate($startingPoints = 0) {
         if (null === $this->calculationCollection) {
@@ -65,6 +72,8 @@ abstract class Calculator
      */
     private function calculateCollection(CalculationsCollection $calculationsCollection, $currentPoints = 0) {
         $this->scoreInformationCollection = new ScoreInformationCollection();
+        $this->penaltyCollection = new PenaltyCollection();
+
         foreach ($calculationsCollection as $calculationItem) {
             /** @var Calculation $calculation */
             $calculation = $calculationItem[CalculationsCollection::FIELD_CALCULATION];
@@ -76,9 +85,26 @@ abstract class Calculator
             }
 
             $calculationResult = $calculation->calculate($input, $total);
-            $currentPoints += $calculationResult->getPoints();
-
             $this->scoreInformationCollection->addScoreInformation($calculationResult->getScoreInformation());
+
+            if ($calculationResult->hasHardPenalty()) {
+                $penalty = $calculationResult->getHardPenalty();
+                $currentPoints = $penalty->calculatePenalty($calculationResult->getPoints());
+                // Reset the penalty collection - no need for this.
+                $this->penaltyCollection = new PenaltyCollection();
+                break;
+            }
+
+            if ($calculationResult->hasSoftPenalty()) {
+                $this->penaltyCollection->add($calculationResult->getSoftPenalty());
+            }
+
+            $currentPoints += $calculationResult->getPoints();
+        }
+
+        /** @var Penalty $penalty */
+        foreach ($this->penaltyCollection as $penalty) {
+            $currentPoints = $penalty->calculatePenalty($currentPoints);
         }
 
         return $currentPoints;
