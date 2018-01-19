@@ -86,9 +86,10 @@ abstract class Calculation
 
         // Converts the input into readable input (percentage for example).
         $input = $this->convertInput($input, $total);
+        $penaltyInput = $this->comparePenaltiesWithConvertedInput() ? $input : $rawInput;
 
-        $addHardPenalty = ($this->hardPenalty instanceof HardPenalty && $this->hardPenalty->applies($input));
-        $addSoftPenalty = ($this->softPenalty instanceof Penalty && $this->softPenalty->applies($input));
+        $addHardPenalty = ($this->hardPenalty instanceof HardPenalty && $this->hardPenalty->applies($penaltyInput));
+        $addSoftPenalty = ($this->softPenalty instanceof Penalty && $this->softPenalty->applies($penaltyInput));
 
         $pointsEarned = $this->calculatePoints($input);
 
@@ -109,6 +110,11 @@ abstract class Calculation
             $addHardPenalty ? $this->hardPenalty : null
         );
     }
+
+    /**
+     * @return bool
+     */
+    abstract protected function comparePenaltiesWithConvertedInput();
 
     abstract protected function convertInput($input, $total = null);
 

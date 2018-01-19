@@ -32,9 +32,20 @@ class CountdownCalculation extends Calculation
         $this->iterate = $iterate;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function convertInput($input, $total = null)
     {
         return $input;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function comparePenaltiesWithConvertedInput()
+    {
+        return false;
     }
 
     /**

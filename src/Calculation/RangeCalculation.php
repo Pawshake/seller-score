@@ -48,6 +48,17 @@ class RangeCalculation extends PercentageCalculation
         $this->unit = $unit;
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function comparePenaltiesWithConvertedInput()
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function convertInput($input, $total = null)
     {
         $range = $this->to - $this->from;

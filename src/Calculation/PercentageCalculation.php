@@ -32,9 +32,20 @@ class PercentageCalculation extends Calculation
         $this->maximumTotal = $maximumTotal;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function convertInput($input, $total = null)
     {
         return $this->calculatePercentage($input, $total);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function comparePenaltiesWithConvertedInput()
+    {
+        return true;
     }
 
     /**
