@@ -78,6 +78,8 @@ abstract class Calculation
      */
     public function calculate($input, $total = null)
     {
+        $rawInput = $input;
+
         if (!is_numeric($input)) {
             throw new \InvalidArgumentException('Calculation input should be an integer');
         }
@@ -91,7 +93,11 @@ abstract class Calculation
         $pointsEarned = $this->calculatePoints($input);
 
         $scoreInformation = new ScoreInformation(
-            $this->getDescription(), $input, $this->points, $pointsEarned,
+            $this->getDescription(),
+            $rawInput,
+            $input,
+            $this->points,
+            $pointsEarned,
             $addSoftPenalty ? $this->softPenalty->getDescription($input) : null,
             $addHardPenalty ? $this->hardPenalty->getDescription($input) : null
         );

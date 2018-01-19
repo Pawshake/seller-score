@@ -9,6 +9,8 @@ class ScoreInformation
      */
     private $description;
 
+    private $rawInput;
+
     /**
      * @var string
      */
@@ -34,14 +36,16 @@ class ScoreInformation
     /**
      * ScoreInformation constructor.
      * @param $description
+     * @param $rawInput
      * @param $input
      * @param $points
      * @param $pointsEarned
      * @param string $softPenalty
      * @param string $hardPenalty
      */
-    public function __construct($description, $input, $points, $pointsEarned, $softPenalty = '', $hardPenalty = '') {
+    public function __construct($description, $rawInput, $input, $points, $pointsEarned, $softPenalty = '', $hardPenalty = '') {
         $this->description = $description;
+        $this->rawInput = $rawInput;
         $this->input = $input;
         $this->points = $points;
         $this->pointsEarned = $pointsEarned;
