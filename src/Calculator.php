@@ -31,16 +31,14 @@ abstract class Calculator
     abstract protected function configure();
 
     /**
-     * @param int $startingPoints
-     *
      * @return int
      * @throws \InvalidArgumentException
      */
-    public function calculate($startingPoints = 0) {
+    public function calculate() {
         if (null === $this->calculationCollection) {
             $this->configure();
         }
-        return $this->calculateCollection($this->calculationCollection, $startingPoints);
+        return $this->calculateCollection($this->calculationCollection);
     }
 
     /**
@@ -65,14 +63,14 @@ abstract class Calculator
 
     /**
      * @param CalculationsCollection $calculationsCollection
-     * @param int $currentPoints
      *
      * @return int
      * @throws \InvalidArgumentException Calculation configuration is not complete.
      */
-    private function calculateCollection(CalculationsCollection $calculationsCollection, $currentPoints = 0) {
+    private function calculateCollection(CalculationsCollection $calculationsCollection) {
         $this->scoreInformationCollection = new ScoreInformationCollection();
         $this->penaltyCollection = new PenaltyCollection();
+        $currentPoints = 0;
 
         foreach ($calculationsCollection as $calculationItem) {
             /** @var Calculation $calculation */

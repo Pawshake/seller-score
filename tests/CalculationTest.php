@@ -4,6 +4,7 @@ namespace Pawshake\SellerScore\Calculations;
 
 use Pawshake\SellerScore\CalculationResult;
 use Pawshake\SellerScore\Calculation;
+use Pawshake\SellerScore\HardPenalty;
 use Pawshake\SellerScore\Penalty;
 
 class CalculationTest extends \PHPUnit_Framework_TestCase
@@ -196,11 +197,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                         0.2,
                         Penalty::OPERATION_MULTIPLY
                     ),
-                    new Penalty(
+                    new HardPenalty(
                         55,
-                        Penalty::COMPARISON_SMALLER,
-                        -10000,
-                        Penalty::OPERATION_PLUS
+                        Penalty::COMPARISON_SMALLER
                     )
                 ),
                 true,
@@ -212,11 +211,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
                     100,
                     200,
                     null,
-                    new Penalty(
+                    new HardPenalty(
                         5,
-                        Penalty::COMPARISON_BIGGER,
-                        -10000,
-                        Penalty::OPERATION_PLUS
+                        Penalty::COMPARISON_BIGGER
                     )
                 ),
                 false,

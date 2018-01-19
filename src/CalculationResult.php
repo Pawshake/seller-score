@@ -14,7 +14,7 @@ class CalculationResult
     private $softPenalty;
 
     /**
-     * @var Penalty
+     * @var HardPenalty
      */
     private $hardPenalty;
 
@@ -33,13 +33,13 @@ class CalculationResult
      * @param $points
      * @param ScoreInformation $scoreInformation
      * @param Penalty|null $softPenalty
-     * @param Penalty|null $hardPenalty
+     * @param HardPenalty|null $hardPenalty
      */
     public function __construct(
         $points,
         ScoreInformation $scoreInformation,
         Penalty $softPenalty = null,
-        Penalty $hardPenalty = null
+        HardPenalty $hardPenalty = null
     ) {
         $this->softPenalty = $softPenalty;
         $this->hardPenalty = $hardPenalty;
@@ -60,7 +60,7 @@ class CalculationResult
      */
     public function hasHardPenalty()
     {
-        return $this->hardPenalty !== null && $this->hardPenalty instanceof Penalty;
+        return $this->hardPenalty !== null && $this->hardPenalty instanceof HardPenalty;
     }
 
     /**

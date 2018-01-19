@@ -3,6 +3,7 @@
 namespace Pawshake\SellerScore\Calculation;
 
 use Pawshake\SellerScore\CalculationResult;
+use Pawshake\SellerScore\HardPenalty;
 use Pawshake\SellerScore\Penalty;
 use Pawshake\SellerScore\ScoreInformation;
 
@@ -29,7 +30,7 @@ abstract class Calculation
     private $softPenalty;
 
     /**
-     * @var null|Penalty
+     * @var null|HardPenalty
      */
     private $hardPenalty;
 
@@ -38,14 +39,14 @@ abstract class Calculation
      * @param string $timeframe
      * @param int $points Maximum mount of points this calculation is worth.
      * @param Penalty|null $softPenalty
-     * @param Penalty|null $hardPenalty
+     * @param HardPenalty|null $hardPenalty
      */
     public function __construct(
         $name,
         $timeframe,
         $points,
         Penalty $softPenalty = null,
-        Penalty $hardPenalty = null
+        HardPenalty $hardPenalty = null
     ) {
         $this->name = $name;
         $this->timeframe = $timeframe;
@@ -84,7 +85,7 @@ abstract class Calculation
         // Converts the input into readable input (percentage for example).
         $input = $this->convertInput($input, $total);
 
-        $addHardPenalty = ($this->hardPenalty instanceof Penalty && $this->hardPenalty->applies($input));
+        $addHardPenalty = ($this->hardPenalty instanceof HardPenalty && $this->hardPenalty->applies($input));
         $addSoftPenalty = ($this->softPenalty instanceof Penalty && $this->softPenalty->applies($input));
 
         $pointsEarned = $this->calculatePoints($input);
