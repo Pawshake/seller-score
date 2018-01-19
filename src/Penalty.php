@@ -52,30 +52,6 @@ class Penalty
     }
 
     /**
-     * @param int $input The input for calculating the penalty.
-     * @param int $points The points to use for calculating the penalty.
-     *
-     * @return int
-     */
-    public function calculate($input, $points)
-    {
-        if ($this->matches($input)) {
-            return $this->calculatePenalty($points);
-        }
-
-        return $points;
-    }
-
-    /**
-     * @param int $input
-     * @return bool
-     */
-    public function matches($input) {
-        return (static::COMPARISON_BIGGER === $this->comparison && $input > $this->threshold)
-            || (static::COMPARISON_SMALLER === $this->comparison && $input < $this->threshold);
-    }
-
-    /**
      * @param int $input
      * @return string
      */

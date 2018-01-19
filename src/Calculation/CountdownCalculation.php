@@ -35,6 +35,14 @@ class CountdownCalculation extends Calculation
     /**
      * @inheritdoc
      */
+    protected function setType()
+    {
+        return static::COUNTDOWN;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function convertInput($input, $total = null)
     {
         return $input;

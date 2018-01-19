@@ -35,6 +35,14 @@ class PercentageCalculation extends Calculation
     /**
      * @inheritdoc
      */
+    protected function setType()
+    {
+        return static::PERCENTAGE;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function convertInput($input, $total = null)
     {
         return $this->calculatePercentage($input, $total);

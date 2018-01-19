@@ -51,6 +51,14 @@ class RangeCalculation extends PercentageCalculation
     /**
      * @inheritdoc
      */
+    protected function setType()
+    {
+        return static::RANGE;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function comparePenaltiesWithConvertedInput()
     {
         return false;

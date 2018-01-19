@@ -9,6 +9,13 @@ use Pawshake\SellerScore\ScoreInformation;
 
 abstract class Calculation
 {
+
+    const RANGE = 'Range';
+    const COUNTDOWN = 'Rountdown';
+    const PERCENTAGE = 'Percentage';
+
+    private $type;
+
     /**
      * @var string
      */
@@ -48,6 +55,7 @@ abstract class Calculation
         Penalty $softPenalty = null,
         HardPenalty $hardPenalty = null
     ) {
+        $this->type = $this->setType();
         $this->name = $name;
         $this->timeframe = $timeframe;
         $this->points = $points;
@@ -55,18 +63,36 @@ abstract class Calculation
         $this->hardPenalty = $hardPenalty;
     }
 
-    private function getName() {
-        return $this->name;
-    }
     /**
      * @return string
      */
-    private function getTimeFrame() {
+    private function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    private function getTimeFrame()
+    {
         return $this->timeframe;
     }
 
-    private function getDescription() {
-        return $this->getName() . ' for ' . $this->getTimeFrame();
+    /**
+     * @return string
+     */
+    private function getDescription()
+    {
+        return $this->getType() . ': ' . $this->getName() . ' for ' . $this->getTimeFrame();
     }
 
     /**
@@ -117,6 +143,8 @@ abstract class Calculation
     abstract protected function comparePenaltiesWithConvertedInput();
 
     abstract protected function convertInput($input, $total = null);
+
+    abstract protected function setType();
 
     /**
      * @param int $input
