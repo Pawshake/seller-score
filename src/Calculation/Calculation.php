@@ -99,8 +99,8 @@ abstract class Calculation
             $input,
             $this->points,
             $pointsEarned,
-            $addSoftPenalty ? $this->softPenalty->getDescription($input) : null,
-            $addHardPenalty ? $this->hardPenalty->getDescription($input) : null
+            $addSoftPenalty ? $this->softPenalty->getDescription($penaltyInput) : null,
+            $addHardPenalty ? $this->hardPenalty->getDescription($penaltyInput) : null
         );
 
         return new CalculationResult(
