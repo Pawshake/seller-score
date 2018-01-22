@@ -12,6 +12,7 @@ class CalculationsCollection implements IteratorAggregate
     const FIELD_CALCULATION = 'calculation';
     const FIELD_INPUT = 'input';
     const FIELD_TOTAL = 'total';
+    const FIELD_APPLY_PENALTIES = 'apply_penalties';
 
     /**
      * @var array
@@ -35,6 +36,7 @@ class CalculationsCollection implements IteratorAggregate
                 static::FIELD_CALCULATION => $calculation,
                 static::FIELD_INPUT => null,
                 static::FIELD_TOTAL => null,
+                static::FIELD_APPLY_PENALTIES => true,
             ];
         }
 
@@ -45,21 +47,24 @@ class CalculationsCollection implements IteratorAggregate
      * @param string|int $id
      * @param int $input
      * @param int|null $total
+     * @param boolean $applyPenalties
      *
      * @return CalculationsCollection
      */
-    public function addCalculationInput($id, $input, $total = null)
+    public function addCalculationInput($id, $input, $total = null, $applyPenalties = true)
     {
         if (isset($this->calculations[$id]) && is_array($this->calculations[$id])) {
             $this->calculations[$id] = array_merge($this->calculations[$id], [
                 static::FIELD_INPUT => $input,
                 static::FIELD_TOTAL => $total,
+                static::FIELD_APPLY_PENALTIES => $applyPenalties,
             ]);
         } else {
             $this->calculations[$id] = [
                 static::FIELD_CALCULATION => null,
                 static::FIELD_INPUT => $input,
                 static::FIELD_TOTAL => $total,
+                static::FIELD_APPLY_PENALTIES => $applyPenalties,
             ];
         }
 
@@ -70,15 +75,17 @@ class CalculationsCollection implements IteratorAggregate
      * @param Calculation $calculation
      * @param int $input
      * @param int $total
+     * @param boolean $applyPenalties
      *
      * @return CalculationsCollection
      */
-    public function addCalculation(Calculation $calculation, $input, $total = null)
+    public function addCalculation(Calculation $calculation, $input, $total = null, $applyPenalties = true)
     {
         $this->calculations[] = [
             static::FIELD_CALCULATION => $calculation,
             static::FIELD_INPUT => $input,
             static::FIELD_TOTAL => $total,
+            static::FIELD_APPLY_PENALTIES => $applyPenalties
         ];
 
         return $this;

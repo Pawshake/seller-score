@@ -11,7 +11,7 @@ abstract class Calculation
 {
 
     const RANGE = 'Range';
-    const COUNTDOWN = 'Rountdown';
+    const COUNTDOWN = 'Countdown';
     const PERCENTAGE = 'Percentage';
 
     private $type;
@@ -98,11 +98,12 @@ abstract class Calculation
     /**
      * @param int $input
      * @param int $total
+     * @param boolean $applyPenalties
      *
      * @return CalculationResult
      * @throws \InvalidArgumentException Default implementation assumes input is an integer.
      */
-    public function calculate($input, $total = null)
+    public function calculate($input, $total = null, $applyPenalties = true)
     {
         $rawInput = $input;
 
@@ -114,8 +115,12 @@ abstract class Calculation
         $input = $this->convertInput($input, $total);
         $penaltyInput = $this->comparePenaltiesWithConvertedInput() ? $input : $rawInput;
 
-        $addHardPenalty = ($this->hardPenalty instanceof HardPenalty && $this->hardPenalty->applies($penaltyInput));
-        $addSoftPenalty = ($this->softPenalty instanceof Penalty && $this->softPenalty->applies($penaltyInput));
+        if ($applyPenalties) {
+            $addHardPenalty = ($this->hardPenalty instanceof HardPenalty && $this->hardPenalty->applies($penaltyInput));
+            $addSoftPenalty = ($this->softPenalty instanceof Penalty && $this->softPenalty->applies($penaltyInput));
+        } else {
+            $addSoftPenalty = $addHardPenalty = false;
+        }
 
         $pointsEarned = $this->calculatePoints($input);
 

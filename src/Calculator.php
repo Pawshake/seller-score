@@ -45,12 +45,13 @@ abstract class Calculator
      * @param string $id
      * @param int $input
      * @param int|null $total
+     * @param boolean $applyPenalties
      */
-    public function addCalculationInput($id, $input, $total = null) {
+    public function addCalculationInput($id, $input, $total = null, $applyPenalties = true) {
         if (null === $this->calculationCollection) {
             $this->configure();
         }
-        $this->calculationCollection->addCalculationInput($id, $input, $total);
+        $this->calculationCollection->addCalculationInput($id, $input, $total, $applyPenalties);
     }
 
     /**
@@ -77,12 +78,13 @@ abstract class Calculator
             $calculation = $calculationItem[CalculationsCollection::FIELD_CALCULATION];
             $input = $calculationItem[CalculationsCollection::FIELD_INPUT];
             $total = $calculationItem[CalculationsCollection::FIELD_TOTAL];
+            $applyPenalties = $calculationItem[CalculationsCollection::FIELD_APPLY_PENALTIES];
 
             if (!$calculation instanceof Calculation || $input === null) {
                 throw new \InvalidArgumentException('Calculation configuration is not complete.');
             }
 
-            $calculationResult = $calculation->calculate($input, $total);
+            $calculationResult = $calculation->calculate($input, $total, $applyPenalties);
             $this->scoreInformationCollection->addScoreInformation($calculationResult->getScoreInformation());
 
             if ($calculationResult->hasHardPenalty()) {
