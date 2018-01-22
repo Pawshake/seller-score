@@ -157,6 +157,61 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(22, $result);
     }
 
+    public function testCalculatorWithDisabledPenalties() {
+        $calculationsCollection = new CalculationsCollection();
+
+        $calculationsCollection
+            ->addCalculation(
+                new Calculation\PercentageCalculation(
+                    'Test Calculation',
+                    'timeframe',
+                    10,
+                    100,
+                    new Penalty(20, Penalty::COMPARISON_SMALLER, 0.5, Penalty::OPERATION_MULTIPLY)
+                ), 10, 100)
+            ->addCalculation(
+                new Calculation\PercentageCalculation(
+                    'Test Calculation 2',
+                    'timeframe',
+                    10,
+                    100
+                ), 100, 100)
+            ->addCalculation(
+                new Calculation\PercentageCalculation(
+                    'Test Calculation 3',
+                    'timeframe',
+                    10,
+                    100
+                ), 10, 1) // Only 10 records, 10 out of 10 = 10 points
+            ->addCalculation(new Calculation\PercentageCalculation(
+                'Test Calculation',
+                'timeframe',
+                10,
+                100,
+                new Penalty(20, Penalty::COMPARISON_SMALLER, 0.5, Penalty::OPERATION_MULTIPLY)
+            ), 10, 100);
+
+        /** @var Calculator $calculator */
+        $calculator = $this->getMockForAbstractClass('Pawshake\SellerScore\Calculator');
+
+        $reflection = new ReflectionClass($calculator);
+
+        // Set the calculation collection.
+        $reflection_property = $reflection->getProperty('calculationCollection');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($calculator, $calculationsCollection);
+
+        // Disable penalties.
+        $calculator->disablePenalties();
+
+        $result = $calculator->calculate();
+
+        $informationCollection = $calculator->getScoreInformationCollection();
+        $this->assertCount(4, $informationCollection);
+
+        $this->assertEquals(22, $result);
+    }
+
     public function testCalculatorWithHardPenalty() {
         $calculationsCollection = new CalculationsCollection();
 

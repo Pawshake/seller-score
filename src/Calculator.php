@@ -10,6 +10,8 @@ use Pawshake\SellerScore\Calculation\Calculation;
  */
 abstract class Calculator
 {
+    private $applyPenalties = true;
+
     /**
      * @var ScoreInformationCollection
      */
@@ -39,6 +41,13 @@ abstract class Calculator
             $this->configure();
         }
         return $this->calculateCollection($this->calculationCollection);
+    }
+
+    /**
+     * Global setting to disable penalties for each calculation.
+     */
+    public function disablePenalties() {
+        $this->applyPenalties = false;
     }
 
     /**
@@ -79,6 +88,11 @@ abstract class Calculator
             $input = $calculationItem[CalculationsCollection::FIELD_INPUT];
             $total = $calculationItem[CalculationsCollection::FIELD_TOTAL];
             $applyPenalties = $calculationItem[CalculationsCollection::FIELD_APPLY_PENALTIES];
+
+            // Override the applyPenalties when the global is set to false.
+            if ($this->applyPenalties === false) {
+                $applyPenalties = false;
+            }
 
             if (!$calculation instanceof Calculation || $input === null) {
                 throw new \InvalidArgumentException('Calculation configuration is not complete.');
