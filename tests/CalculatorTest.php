@@ -101,8 +101,8 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $informationCollection = $calculator->getScoreInformationCollection();
         $this->assertCount(4, $informationCollection);
-
         $this->assertEquals(6, $result);
+        $this->assertTrue($calculator->hasPenalties());
     }
 
     public function testCalculatorWithSoftPenaltyButNoPenaltiesShouldApply() {
@@ -153,8 +153,8 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $informationCollection = $calculator->getScoreInformationCollection();
         $this->assertCount(4, $informationCollection);
-
         $this->assertEquals(22, $result);
+        $this->assertFalse($calculator->hasPenalties());
     }
 
     public function testCalculatorWithDisabledPenalties() {
@@ -208,8 +208,8 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $informationCollection = $calculator->getScoreInformationCollection();
         $this->assertCount(4, $informationCollection);
-
         $this->assertEquals(22, $result);
+        $this->assertFalse($calculator->hasPenalties());
     }
 
     public function testCalculatorWithHardPenalty() {
@@ -263,5 +263,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $informationCollection);
         $this->assertEquals(-10000, $result);
+        $this->assertTrue($calculator->hasPenalties());
     }
 }

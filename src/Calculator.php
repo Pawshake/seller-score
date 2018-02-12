@@ -103,10 +103,8 @@ abstract class Calculator
 
             if ($calculationResult->hasHardPenalty()) {
                 $penalty = $calculationResult->getHardPenalty();
-                $currentPoints = $penalty->calculatePenalty($calculationResult->getPoints());
-                // Reset the penalty collection - no need for this.
-                $this->penaltyCollection = new PenaltyCollection();
-                break;
+                $this->penaltyCollection->add($penalty);
+                return $penalty->calculatePenalty($calculationResult->getPoints());
             }
 
             if ($calculationResult->hasSoftPenalty()) {
@@ -122,5 +120,14 @@ abstract class Calculator
         }
 
         return $currentPoints;
+    }
+
+    /**
+     * Check if we have had some penalties or not.
+     *
+     * @return bool
+     */
+    public function hasPenalties() {
+        return !$this->penaltyCollection->isEmpty();
     }
 }

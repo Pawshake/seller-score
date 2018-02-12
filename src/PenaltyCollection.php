@@ -25,4 +25,13 @@ class PenaltyCollection implements IteratorAggregate
     {
         return new ArrayIterator($this->penalties);
     }
+
+    /**
+     * Returns true if the collection is empty, false otherwise.
+     *
+     * @return bool
+     */
+    public function isEmpty() {
+        return $this->penalties === [];
+    }
 }
