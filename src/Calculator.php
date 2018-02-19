@@ -63,6 +63,13 @@ abstract class Calculator
         $this->calculationCollection->addCalculationInput($id, $input, $total, $applyPenalties);
     }
 
+    public function removeCalculation($id) {
+        if (null === $this->calculationCollection) {
+            $this->configure();
+        }
+        $this->calculationCollection->removeCalculation($id);
+    }
+
     /**
      * @return ScoreInformationCollection
      */

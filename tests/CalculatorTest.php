@@ -265,4 +265,35 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(-10000, $result);
         $this->assertTrue($calculator->hasPenalties());
     }
+
+    public function testCalculatorWithDynamicRemoveOfCalculation() {
+        $calculationCollection = new CalculationsCollection();
+
+        $calculationCollection
+            ->addCalculationConfiguration('unique_calculation_one', new Calculation\PercentageCalculation('Lifetime Conversion Rate for unique users', 'last year', 50))
+            ->addCalculationConfiguration('unique_calculation_two', new Calculation\PercentageCalculation('Conversion Rate', 'last 10 unique users', 50));
+
+        /** @var Calculator $calculator */
+        $calculator = $this->getMockForAbstractClass('Pawshake\SellerScore\Calculator');
+
+        // Set the calculation collection.
+        $reflection = new ReflectionClass($calculator);
+        $reflection_property = $reflection->getProperty('calculationCollection');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($calculator, $calculationCollection);
+
+        $reflection = new ReflectionClass($calculator);
+        $reflection_property = $reflection->getProperty('calculationCollection');
+        $reflection_property->setAccessible(true);
+        $value = $reflection_property->getValue($calculator);
+        $this->assertCount(2, $value);
+
+        $calculator->removeCalculation('unique_calculation_one');
+
+        $reflection = new ReflectionClass($calculator);
+        $reflection_property = $reflection->getProperty('calculationCollection');
+        $reflection_property->setAccessible(true);
+        $value = $reflection_property->getValue($calculator);
+        $this->assertCount(1, $value);
+    }
 }

@@ -44,6 +44,17 @@ class CalculationsCollection implements IteratorAggregate
     }
 
     /**
+     * Removes a calculation from the collection.
+     *
+     * @param $id
+     */
+    public function removeCalculation($id) {
+        if (isset($this->calculations[$id])) {
+            unset($this->calculations[$id]);
+        }
+    }
+
+    /**
      * @param string|int $id
      * @param int $input
      * @param int|null $total
