@@ -25,7 +25,7 @@ class RandomBoostCalculation extends Calculation
     {
         $this->min = $min;
         $this->max = $max;
-        parent::__construct($name, $timeframe, 0);
+        parent::__construct($name, $timeframe, $max);
     }
 
     /**
