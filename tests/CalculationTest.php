@@ -13,6 +13,33 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     const CALCULATION_TIMEFRAME = 'timeframe';
 
     /**
+     * @dataProvider randomBoostProvider
+     */
+    public function testRandomBoost($min, $max) {
+        $calculation = new Calculation\RandomBoostCalculation(
+            static::CALCULATION_NAME,
+            static::CALCULATION_TIMEFRAME,
+            $min,
+            $max
+        );
+
+        $result = $calculation->calculate();
+
+        $this->assertInstanceOf(CalculationResult::class, $result);
+        $this->assertGreaterThanOrEqual($min, $result->getPoints());
+        $this->assertLessThanOrEqual($max, $result->getPoints());
+    }
+
+    public function randomBoostProvider() {
+        return [
+            [0,10],
+            [5,10],
+            [7,15],
+            [10,100],
+        ];
+    }
+
+    /**
      * @dataProvider percentageProvider
      */
     public function testPercentageMethod($points, $total, $input, $expectedEarnedPoints)

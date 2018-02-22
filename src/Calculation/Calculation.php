@@ -9,10 +9,10 @@ use Pawshake\SellerScore\ScoreInformation;
 
 abstract class Calculation
 {
-
     const RANGE = 'Range';
     const COUNTDOWN = 'Countdown';
     const PERCENTAGE = 'Percentage';
+    const RANDOM_BOOST = 'Random boost';
 
     private $type;
 
@@ -90,7 +90,7 @@ abstract class Calculation
     /**
      * @return string
      */
-    private function getDescription()
+    protected function getDescription()
     {
         return $this->getType() . ': ' . $this->getName() . ' for ' . $this->getTimeFrame();
     }
