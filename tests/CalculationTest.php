@@ -248,4 +248,25 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    /**
+     * @param $input
+     * @param $hardPenalty
+     *
+     * @dataProvider booleanCalculationProvider
+     */
+    public function testBooleanCalculation($input, $hardPenalty) {
+        $calculation = new Calculation\BooleanCalculation(static::CALCULATION_NAME);
+        $result = $calculation->calculate($input);
+        $this->assertEquals($hardPenalty, $result->hasHardPenalty());
+    }
+
+    public function booleanCalculationProvider() {
+        return [
+            [1, true],
+            [0, false],
+            [0, false],
+            [1, true],
+        ];
+    }
 }

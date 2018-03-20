@@ -13,6 +13,7 @@ abstract class Calculation
     const COUNTDOWN = 'Countdown';
     const PERCENTAGE = 'Percentage';
     const RANDOM_BOOST = 'Random boost';
+    const BOOLEAN = 'Boolean';
 
     private $type;
 
