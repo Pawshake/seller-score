@@ -265,8 +265,6 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
         return [
             [1, true],
             [0, false],
-            [0, false],
-            [1, true],
         ];
     }
 }
